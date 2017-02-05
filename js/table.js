@@ -1,6 +1,7 @@
 var tableState = {
 
   Player: function(){
+
     this.marker = {
       markerRect: null,
       initMarker: function(){
@@ -13,6 +14,7 @@ var tableState = {
         this.markerRect.y = (floorLayer.getTileY(this.markerRect.y) + moveY) * 32;
       }
     };
+
     this.controls = {
       upKey: null, downKey: null, leftKey: null, rightKey: null, actionKey: null,
       initKeyboard: function(){
@@ -23,24 +25,25 @@ var tableState = {
         this.actionKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACE);
       }
     };
-    this.isActive = false;
-  },
 
-  PlayerFactory: function(){
-    this.player = new tableState.Player();
+    this.isActive = false;
+
     this.withMarker = function(){
-      this.player.marker.initMarker();
+      this.marker.initMarker();
       return this;
     };
+
     this.withControls = function(type){
       if(type == 'keyboard'){
-        this.player.controls.initKeyboard();
+        this.controls.initKeyboard();
       }
       return this;
     };
+
     this.build = function(){
-      return this.player;
+      return this;
     };
+
     return this;
   },
 
@@ -73,7 +76,7 @@ var tableState = {
 
     this.table.initTable();
 
-    this.players.push(new this.PlayerFactory()
+    this.players.push(new this.Player()
                       .withMarker()
                       .withControls('keyboard')
                       .build());
