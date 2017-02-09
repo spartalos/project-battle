@@ -1,5 +1,7 @@
 var menuState = {
 
+  players: [],
+
   preload: function (){
 
   },
@@ -21,6 +23,12 @@ var menuState = {
   },
 
   startGameListener: function(){
+
+    this.players.push(new Player()
+                      .withControls('keyboard')
+                      .addCharacter(0)
+                      .build());
+
     game.state.start('load');
   }
 
