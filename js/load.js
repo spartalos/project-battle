@@ -6,6 +6,7 @@ var loadState = {
 
     game.load.tilemap('tableTileMap', './assets/json/table.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tilesheetImage', './assets/images/fulltilesheet.png');
+    game.load.spritesheet('spritesheetImage', './assets/images/fulltilesheet.png', 32, 32);
 
   },
 

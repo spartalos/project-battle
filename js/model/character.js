@@ -6,6 +6,7 @@ var Character = function(){
   this.damage = null;
   this.type = null;
   this.tileId = null;
+  this.sprite = null;
 
   this.initFromJSON = function(id){
     var character = JSON.parse(characters)[id];

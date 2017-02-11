@@ -1,13 +1,14 @@
 var tableState = {
 
   activePlayer: null,
+  activePlayerId: 0,
 
   table: {
     tilemap: null,
     floorLayer: null,
     itemLayer: null,
-    objectLayer: null,
-    characterLayer: null,
+    characterGroup: null,
+    objects: null,
 
     initTable: function(){
       this.tilemap = game.add.tilemap('tableTileMap');
@@ -15,9 +16,44 @@ var tableState = {
 
       this.floorLayer = this.tilemap.createLayer('FloorLayer');
       this.itemLayer = this.tilemap.createLayer('ItemLayer');
-      this.characterLayer = this.tilemap.createLayer('CharacterLayer');
-      //this.characterLayer.visible = false;
+
+      this.objects = this.tilemap.objects['ObjectLayer'];
+
+      this.characterGroup = game.add.group();
+    },
+
+    spawnCharacters: function(spawnId, characterDeck, color){
+      var spawnAreaObject = null;
+
+      for(i = 0; i < this.objects.length; i++){
+        if(this.objects[i].type == spawnId){
+          spawnAreaObject = this.objects[i];
+          break;
+        }
+      }
+
+      var widthInTiles = spawnAreaObject.width / 32;
+      var heightInTiles = spawnAreaObject.height / 32;
+      //var xInTiles = spawnAreaObject.x / 32;
+      //var yInTiles = spawnAreaObject.y / 32;
+      var charId = 0;
+
+      for(i = 0; i < heightInTiles && charId < characterDeck.length; i++){
+        for(j = 0; j < widthInTiles && charId < characterDeck.length; j++){
+          //this.tilemap.putTile(characterDeck[charId].tileId, xInTiles + j, yInTiles + i, this.characterLayer);
+          characterDeck[charId].sprite = game.add.sprite(
+                                                    spawnAreaObject.x + (j * 32),
+                                                    spawnAreaObject.y + (i * 32),
+                                                    'spritesheetImage',
+                                                    characterDeck[charId].tileId,
+                                                    this.characterGroup);
+          characterDeck[charId].sprite.tint = color;
+          charId++;
+        }
+      }
+
     }
+
   },
 
   preload: function (){
@@ -28,11 +64,16 @@ var tableState = {
 
     this.table.initTable();
 
+    for(k = 0; k < menuState.players.length; k++){
+      this.table.spawnCharacters(menuState.players[k].spawnPoint,
+                                  menuState.players[k].characterDeck,
+                                  menuState.players[k].color);
+      menuState.players[k].marker.drawMarker();
+    }
 
-    this.table.tilemap.putTile(menuState.players[0].characterDeck[0].tileId, 3, 3, this.table.characterLayer);
+    this.activePlayerId = menuState.players.length - 1;
 
-    this.activePlayer = menuState.players[0];
-    this.activePlayer.marker.drawMarker();
+    this.nextPlayer();
 
   },
 
@@ -56,8 +97,21 @@ var tableState = {
     if(this.activePlayer.controls.actionKey.isDown && this.activePlayer.controls.actionKey.downDuration(1000)){
       this.activePlayer.controls.actionKey.reset();
       this.activePlayer.marker.toggleMarker();
+      this.nextPlayer();
     }
 
+  },
+
+  nextPlayer: function(){
+    if(++this.activePlayerId % menuState.players.length == 0){
+      this.activePlayerId = 0;
+    }
+    this.activePlayer = menuState.players[this.activePlayerId];
+    this.activePlayer.marker.toggleMarker();
+  },
+
+  moveCharacter: function(){
+    
   }
 
 };

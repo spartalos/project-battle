@@ -1,11 +1,15 @@
 var Player = function(){
 
+  this.color = '0x2A4F6E';
+  this.spawnPoint = null;
+
   this.marker = {
     markerRect: null,
     drawMarker: function(){
       this.markerRect = game.add.graphics();
       this.markerRect.lineStyle(2, 0x000000, 1);
       this.markerRect.drawRect(256, 256, 32, 32);
+      this.markerRect.visible = false;
     },
     toggleMarker: function(){
       this.markerRect.visible = !this.markerRect.visible;
@@ -18,12 +22,12 @@ var Player = function(){
 
   this.controls = {
     upKey: null, downKey: null, leftKey: null, rightKey: null, actionKey: null,
-    initKeyboard: function(){
-      this.upKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
-      this.downKey = game.input.keyboard.addKey(Phaser.Keyboard.S);
-      this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
-      this.rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
-      this.actionKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    initKeyboard: function(upKey, downKey, leftKey, rightKey, actionKey){
+      this.upKey = game.input.keyboard.addKey(upKey != null ? upKey : Phaser.Keyboard.W);
+      this.downKey = game.input.keyboard.addKey(downKey != null ? downKey : Phaser.Keyboard.S);
+      this.leftKey = game.input.keyboard.addKey(leftKey != null ? leftKey : Phaser.Keyboard.A);
+      this.rightKey = game.input.keyboard.addKey(rightKey != null ? rightKey : Phaser.Keyboard.D);
+      this.actionKey = game.input.keyboard.addKey(actionKey != null ? actionKey : Phaser.Keyboard.SPACEBAR);
     }
   };
 
@@ -36,10 +40,20 @@ var Player = function(){
     return this;
   };
 
-  this.withControls = function(type){
+  this.withControls = function(type, upKey, downKey, leftKey, rightKey, actionKey){
     if(type == 'keyboard'){
-      this.controls.initKeyboard();
+      this.controls.initKeyboard(upKey, downKey, leftKey, rightKey, actionKey);
     }
+    return this;
+  };
+
+  this.withColor = function(color){
+    this.color = color;
+    return this;
+  };
+
+  this.withSpawnPoint = function(spawnPoint){
+    this.spawnPoint = spawnPoint;
     return this;
   };
 

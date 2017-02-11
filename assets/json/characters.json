@@ -1,1 +1,1 @@
-characters = '[{"id": "0","name": "Warrior","health": 100,"damage": 20,"type": "close","tileId": 1},{"id": "1","name": "Mage","health": 50,"damage": 40,"type": "ranged","tileId": 7}]';
+characters = '[{"id": "0","name": "Warrior","health": 100,"damage": 20,"type": "close","tileId": 0},{"id": "1","name": "Mage","health": 50,"damage": 40,"type": "ranged","tileId": 6}]';
