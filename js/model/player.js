@@ -1,5 +1,6 @@
 var Player = function(){
 
+  this.team = null;
   this.color = '0x2A4F6E';
   this.spawnPoint = null;
 
@@ -8,7 +9,9 @@ var Player = function(){
     drawMarker: function(){
       this.markerRect = game.add.graphics();
       this.markerRect.lineStyle(2, 0x000000, 1);
-      this.markerRect.drawRect(256, 256, 32, 32);
+      this.markerRect.drawRect(0, 0, 32, 32);
+      this.markerRect.x = 256;
+      this.markerRect.y = 256;
       this.markerRect.visible = false;
     },
     toggleMarker: function(){
@@ -57,8 +60,13 @@ var Player = function(){
     return this;
   };
 
+  this.withTeam = function(team){
+    this.team = team;
+    return this;
+  }
+
   this.addCharacter = function(id){
-    this.characterDeck.push(new Character().initFromJSON(id));
+    this.characterDeck.push(new Character().initFromJSON(id).addToTeam(this.team));
     return this;
   };
 

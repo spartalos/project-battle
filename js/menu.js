@@ -25,6 +25,7 @@ var menuState = {
   startGameListener: function(){
 
     this.players.push(new Player()
+                      .withTeam('teamA')
                       .withControls('keyboard')
                       .withColor('0x486F82')
                       .withSpawnPoint('spawnA')
@@ -44,10 +45,10 @@ var menuState = {
                       .addCharacter(0)
                       .addCharacter(0)
                       .addCharacter(0)
-                      .addCharacter(0)
                       .build());
 
     this.players.push(new Player()
+                      .withTeam('teamB')
                       .withControls('keyboard', Phaser.Keyboard.I,
                                                 Phaser.Keyboard.K,
                                                 Phaser.Keyboard.J,
@@ -66,7 +67,6 @@ var menuState = {
                       .addCharacter(0)
                       .addCharacter(1)
                       .addCharacter(1)
-                      .addCharacter(0)
                       .addCharacter(0)
                       .addCharacter(0)
                       .addCharacter(0)
