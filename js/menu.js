@@ -2,6 +2,14 @@ var menuState = {
 
   players: [],
 
+  rescale: function(hScale, vScale){
+    game.scale.setResizeCallback(function(){
+      game.scale.setUserScale(hScale, vScale);
+    }, game);
+
+    game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+  },
+
   preload: function (){
 
   },
