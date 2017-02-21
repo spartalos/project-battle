@@ -119,10 +119,10 @@ var tableState = {
     } else { // Put down a character
 
         var nextMove = this.isLegalMove();
-        console.log(nextMove);
+
         if(nextMove){
           if(nextMove.cid != null){
-            game.state.start('arena');
+            game.state.start('arena', false, false, this.activeCharacter, nextMove);
           }
           this.activeCharacter.positionX = this.activeCharacter.sprite.x;
           this.activeCharacter.positionY = this.activeCharacter.sprite.y;
