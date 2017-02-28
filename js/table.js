@@ -2,6 +2,7 @@ var tableState = {
 
   activePlayer: null,
   activeCharacter: null,
+  defendingCharacter: null,
   activePlayerId: 0,
 
   table: {
@@ -122,12 +123,13 @@ var tableState = {
 
         if(nextMove){
           if(nextMove.cid != null){
-            game.state.start('arena', false, false, this.activeCharacter, nextMove);
+            this.defendingCharacter = nextMove;
+            game.state.start('arena');
           }
-          this.activeCharacter.positionX = this.activeCharacter.sprite.x;
-          this.activeCharacter.positionY = this.activeCharacter.sprite.y;
-          this.activeCharacter = null;
-          this.nextPlayer();
+          // this.activeCharacter.positionX = this.activeCharacter.sprite.x;
+          // this.activeCharacter.positionY = this.activeCharacter.sprite.y;
+          // this.activeCharacter = null;
+          // this.nextPlayer();
       }
 
     }

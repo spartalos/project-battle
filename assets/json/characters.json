@@ -1,2 +1,2 @@
 characters = '[{"id": "0","name": "Warrior","health": 100,"damage": 20, "moveSpeed": 1, "type": "close","tileId": 0},'
-  + '{"id": "1","name": "Mage","health": 50,"damage": 40, "moveSpeed": 2, "type": "ranged","tileId": 6}]';
+  + '{"id": "1","name": "Mage","health": 50,"damage": 40, "moveSpeed": 8, "type": "ranged","tileId": 6}]';
