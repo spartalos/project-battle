@@ -16,7 +16,7 @@ var loadState = {
   },
 
   create: function(){
-    game.state.start('table');
+    game.state.start('menu');
   },
 
   update: function(){

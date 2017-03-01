@@ -14,6 +14,7 @@ var arenaState = {
       this.tilemap = game.add.tilemap('arenaTileMap');
       this.tilemap.addTilesetImage('jeroomtileset', 'tilesheetImage');
       this.floorLayer = this.tilemap.createLayer('FloorLayer');
+      this.floorLayer.resizeWorld();
       this.objects = this.tilemap.objects['ObjectLayer'];
       this.tilemap.setCollision(131, true, this.floorLayer);
       this.characterGroup = game.add.group();
@@ -28,19 +29,22 @@ var arenaState = {
         }
       }
 
+     character.sprite = game.add.sprite(spawnAreaObject.x,
+                                                 spawnAreaObject.y,
+                                                 'spritesheetImage',
+                                                 character.tileId,
+                                                 this.characterGroup);
 
-      character.sprite = game.add.sprite(spawnAreaObject.x,
-                                                   spawnAreaObject.y,
-                                                   'spritesheetImage',
-                                                   character.tileId,
-                                                   this.characterGroup);
+     game.physics.arcade.enable(character.sprite);
+     character.sprite.tint = character.player.color;
+     character.sprite.anchor.setTo(.5, .5);
+     character.sprite.body.bounce.y = 0;
+     character.sprite.body.gravity.y = 300;
+     character.sprite.body.collideWorldBounds = true;
 
-       game.physics.arcade.enable(character.sprite);
-       character.sprite.body.bounce.y = 0.2;
-       character.sprite.body.gravity.y = 300;
-       character.sprite.body.collideWorldBounds = true;
+     character.addWeapon();
 
-    }
+   }
   },
 
   preload: function(){
@@ -64,15 +68,25 @@ var arenaState = {
 
     game.physics.arcade.collide(this.attackingCharacter.sprite, this.arena.floorLayer);
     game.physics.arcade.collide(this.defendingCharacter.sprite, this.arena.floorLayer);
+    game.physics.arcade.collide(this.attackingCharacter.weapon.bullets, this.arena.floorLayer, function(bullet, floor){
+      bullet.kill();
+    });
+    game.physics.arcade.collide(this.defendingCharacter.weapon.bullets, this.arena.floorLayer, function(bullet, floor){
+      bullet.kill();
+    });
+    game.physics.arcade.collide(this.attackingCharacter.weapon.bullets, this.defendingCharacter.sprite, function(bullet, sprite, attackingCharacter, defendingCharacter){
+      bullet.kill();
+      defendingCharacter.health -= attackingCharacter.damage;
+      console.log('defendingCharacter health: ' + defendingCharacter.health);
+    });
+    game.physics.arcade.collide(this.defendingCharacter.weapon.bullets, this.attackingCharacter.sprite, function(bullet, floor){
+      bullet.kill();
+      this.attackingCharacter.health -= this.defendingCharacter.damage;
+      console.log('attackingCharacter health: ' + this.attackingCharacter.health);
+    });
 
-    if (tableState.activePlayer.controls.upKey.isDown) {
-        this.attackingCharacter.sprite.body.velocity.y -= 10;
-    }
-    if (tableState.activePlayer.controls.leftKey.isDown) {
-      this.attackingCharacter.sprite.body.velocity.x -= 1;
-    } else if (tableState.activePlayer.controls.rightKey.isDown) {
-      this.attackingCharacter.sprite.body.velocity.x += 1;
-    }
+    this.attackingCharacter.moveOnArena();
+    this.defendingCharacter.moveOnArena();
 
   }
 

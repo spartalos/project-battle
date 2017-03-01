@@ -82,7 +82,7 @@ var menuState = {
                       .addCharacter(0)
                       .build());
 
-    game.state.start('load');
+    game.state.start('table');
   }
 
 };

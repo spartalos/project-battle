@@ -6,4 +6,4 @@ game.state.add('table', tableState);
 game.state.add('arena', arenaState);
 game.state.add('win', winState);
 
-game.state.start('menu');
+game.state.start('load');

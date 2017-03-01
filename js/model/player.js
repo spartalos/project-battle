@@ -66,7 +66,7 @@ var Player = function(){
   }
 
   this.addCharacter = function(id){
-    this.characterDeck.push(new Character().initFromJSON(id).addToTeam(this.team));
+    this.characterDeck.push(new Character().initFromJSON(id).addToTeam(this.team).addToPlayer(this));
     return this;
   };
 

@@ -168,6 +168,10 @@ var tableState = {
 
   },
 
+  /***
+  When a character is picked, it needs to be moved with the marker.
+  This method serves this purpose.
+  ***/
   moveCharacterWithMarker: function() {
     if (this.activeCharacter != null) {
       this.activeCharacter.move(this.activePlayer.marker.markerRect.x, this.activePlayer.marker.markerRect.y);
