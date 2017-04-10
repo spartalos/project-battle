@@ -37,15 +37,29 @@ var tableState = {
       var charId = 0;
       for (i = 0; i < heightInTiles && charId < characterDeck.length; i++) {
         for (j = 0; j < widthInTiles && charId < characterDeck.length; j++) {
-          characterDeck[charId].sprite =
-                                   game.add.sprite(spawnAreaObject.x + (j * 32),
-                                                  spawnAreaObject.y + (i * 32),
-                                                  'spritesheetImage',
-                                                  characterDeck[charId].tileId,
-                                                  this.characterGroup);
-          characterDeck[charId].positionX = characterDeck[charId].sprite.x;
-          characterDeck[charId].positionY = characterDeck[charId].sprite.y;
-          characterDeck[charId].sprite.tint = color;
+          if(characterDeck[charId].health > 0){
+            console.log(characterDeck[charId].positionX);
+            //put the character to its default position
+            if(characterDeck[charId].positionX == null && characterDeck[charId].positionY == null){
+              characterDeck[charId].sprite =
+                                       game.add.sprite(spawnAreaObject.x + (j * 32),
+                                                      spawnAreaObject.y + (i * 32),
+                                                      'spritesheetImage',
+                                                      characterDeck[charId].tileId,
+                                                      this.characterGroup);
+              characterDeck[charId].positionX = characterDeck[charId].sprite.x;
+              characterDeck[charId].positionY = characterDeck[charId].sprite.y;
+              characterDeck[charId].sprite.tint = color;
+            }else{//put the character to its current position
+              characterDeck[charId].sprite =
+                                       game.add.sprite(characterDeck[charId].positionX,
+                                                      characterDeck[charId].positionY,
+                                                      'spritesheetImage',
+                                                      characterDeck[charId].tileId,
+                                                      this.characterGroup);
+              characterDeck[charId].sprite.tint = color;
+            }
+          }
           charId++;
         }
       }
@@ -103,6 +117,7 @@ var tableState = {
     this.activePlayer.marker.toggleMarker();
     this.activePlayer = menuState.players[this.activePlayerId];
     this.activePlayer.marker.toggleMarker();
+    this.activeCharacter = null;
   },
 
   placeCharacter: function() {
@@ -119,17 +134,17 @@ var tableState = {
 
     } else { // Put down a character
 
-        var nextMove = this.isLegalMove();
+        var movementObject = this.isLegalMove();
 
-        if(nextMove){
-          if(nextMove.cid != null){
-            this.defendingCharacter = nextMove;
+        if(movementObject){
+          if(movementObject.cid != null){
+            this.defendingCharacter = movementObject;
             game.state.start('arena');
+          }else{
+            this.activeCharacter.positionX = this.activeCharacter.sprite.x;
+            this.activeCharacter.positionY = this.activeCharacter.sprite.y;
+            this.nextPlayer();
           }
-          // this.activeCharacter.positionX = this.activeCharacter.sprite.x;
-          // this.activeCharacter.positionY = this.activeCharacter.sprite.y;
-          // this.activeCharacter = null;
-          // this.nextPlayer();
       }
 
     }

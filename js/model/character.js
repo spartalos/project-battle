@@ -61,7 +61,7 @@ var Character = function() {
     this.weapon = game.add.weapon(10, 'spritesheetImage', this.weaponTileId);
     this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
     this.weapon.fireRate = 300;
-    this.weapon.bulletSpeed = 100;
+    this.weapon.bulletSpeed = 300;
     this.weapon.trackSprite(this.sprite, 0, 0, true);
     return this;
   };
@@ -77,13 +77,13 @@ var Character = function() {
         this.sprite.body.velocity.y -= 250;
     }
     if (this.player.controls.leftKey.isDown) {
-      //Mirroring on left movement
+      //Mirroring sprite on left movement
       if(this.sprite.scale.x > 0){
           this.sprite.scale.x *= -1;
       };
       this.sprite.body.velocity.x -= 150;
     } else if (this.player.controls.rightKey.isDown) {
-      //Return sprite to default on right movement
+      //Rescale sprite to default when moving right
       if(this.sprite.scale.x < 0){
         this.sprite.scale.x *= -1;
       }

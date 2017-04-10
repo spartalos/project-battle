@@ -66,28 +66,56 @@ var arenaState = {
 
   update: function(){
 
-    game.physics.arcade.collide(this.attackingCharacter.sprite, this.arena.floorLayer);
-    game.physics.arcade.collide(this.defendingCharacter.sprite, this.arena.floorLayer);
-    game.physics.arcade.collide(this.attackingCharacter.weapon.bullets, this.arena.floorLayer, function(bullet, floor){
-      bullet.kill();
-    });
-    game.physics.arcade.collide(this.defendingCharacter.weapon.bullets, this.arena.floorLayer, function(bullet, floor){
-      bullet.kill();
-    });
-    game.physics.arcade.collide(this.attackingCharacter.weapon.bullets, this.defendingCharacter.sprite, function(bullet, sprite, attackingCharacter, defendingCharacter){
-      bullet.kill();
-      defendingCharacter.health -= attackingCharacter.damage;
-      console.log('defendingCharacter health: ' + defendingCharacter.health);
-    });
-    game.physics.arcade.collide(this.defendingCharacter.weapon.bullets, this.attackingCharacter.sprite, function(bullet, floor){
-      bullet.kill();
-      this.attackingCharacter.health -= this.defendingCharacter.damage;
-      console.log('attackingCharacter health: ' + this.attackingCharacter.health);
-    });
+    this.collisionDetectionBetweenFloorCharacters();
+    this.collisionDetectionBetweenBulletsFloor();
+    this.collisionDetectionBetweenBulletsCharacters();
 
     this.attackingCharacter.moveOnArena();
     this.defendingCharacter.moveOnArena();
 
+  },
+
+  collisionDetectionBetweenFloorCharacters: function(){
+      game.physics.arcade.collide(this.attackingCharacter.sprite, this.arena.floorLayer);
+      game.physics.arcade.collide(this.defendingCharacter.sprite, this.arena.floorLayer);
+  },
+
+  collisionDetectionBetweenBulletsFloor: function(){
+    game.physics.arcade.collide(this.attackingCharacter.weapon.bullets, this.arena.floorLayer, function(bullet, floor){
+      bullet.kill();
+    });
+
+    game.physics.arcade.collide(this.defendingCharacter.weapon.bullets, this.arena.floorLayer, function(bullet, floor){
+      bullet.kill();
+    });
+  },
+
+  collisionDetectionBetweenBulletsCharacters: function(){
+    game.physics.arcade.collide(this.attackingCharacter.weapon.bullets,
+                                this.defendingCharacter.sprite,
+      function(sprite, bullet){
+        bullet.kill();
+        arenaState.defendingCharacter.health -= arenaState.attackingCharacter.damage;
+        if(arenaState.defendingCharacter.health < 0){
+          arenaState.attackingCharacter.positionX = arenaState.defendingCharacter.positionX;
+          arenaState.attackingCharacter.positionY = arenaState.defendingCharacter.positionY;
+          tableState.nextPlayer();
+          game.state.start('table');
+        }
+      }
+    );
+
+    game.physics.arcade.collide(this.defendingCharacter.weapon.bullets,
+                                this.attackingCharacter.sprite,
+      function(sprite, bullet){
+        bullet.kill();
+        arenaState.attackingCharacter.health -= arenaState.defendingCharacter.damage;
+        if(arenaState.attackingCharacter.health < 0){
+          tableState.nextPlayer();
+          game.state.start('table');
+        }
+      }
+    );
   }
 
 };
