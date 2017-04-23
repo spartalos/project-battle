@@ -99,7 +99,6 @@ var arenaState = {
         if(arenaState.defendingCharacter.health < 0){
           arenaState.attackingCharacter.positionX = arenaState.defendingCharacter.positionX;
           arenaState.attackingCharacter.positionY = arenaState.defendingCharacter.positionY;
-          tableState.nextPlayer();
           game.state.start('table');
         }
       }
@@ -111,7 +110,6 @@ var arenaState = {
         bullet.kill();
         arenaState.attackingCharacter.health -= arenaState.defendingCharacter.damage;
         if(arenaState.attackingCharacter.health < 0){
-          tableState.nextPlayer();
           game.state.start('table');
         }
       }

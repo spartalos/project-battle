@@ -3,7 +3,7 @@ var tableState = {
   activePlayer: null,
   activeCharacter: null,
   defendingCharacter: null,
-  activePlayerId: 0,
+  activePlayerId: 1,
 
   table: {
 
@@ -25,59 +25,52 @@ var tableState = {
     },
 
     spawnCharacters: function(spawnId, characterDeck, color) {
+
       var spawnAreaObject = null;
+
       for (i = 0; i < this.objects.length; i++) {
         if (this.objects[i].type == spawnId) {
           spawnAreaObject = this.objects[i];
           break;
         }
       }
+
       var widthInTiles = spawnAreaObject.width / 32;
       var heightInTiles = spawnAreaObject.height / 32;
       var charId = 0;
+
       for (i = 0; i < heightInTiles && charId < characterDeck.length; i++) {
         for (j = 0; j < widthInTiles && charId < characterDeck.length; j++) {
-          if(characterDeck[charId].health > 0){
-            console.log(characterDeck[charId].positionX);
-            //put the character to its default position
-            if(characterDeck[charId].positionX == null && characterDeck[charId].positionY == null){
-              characterDeck[charId].sprite =
-                                       game.add.sprite(spawnAreaObject.x + (j * 32),
-                                                      spawnAreaObject.y + (i * 32),
-                                                      'spritesheetImage',
-                                                      characterDeck[charId].tileId,
-                                                      this.characterGroup);
-              characterDeck[charId].positionX = characterDeck[charId].sprite.x;
-              characterDeck[charId].positionY = characterDeck[charId].sprite.y;
-              characterDeck[charId].sprite.tint = color;
-            }else{//put the character to its current position
-              characterDeck[charId].sprite =
-                                       game.add.sprite(characterDeck[charId].positionX,
-                                                      characterDeck[charId].positionY,
-                                                      'spritesheetImage',
-                                                      characterDeck[charId].tileId,
-                                                      this.characterGroup);
-              characterDeck[charId].sprite.tint = color;
-            }
-          }
+          this.addCharacterSpriteToTable(characterDeck[charId], spawnAreaObject, i, j);
           charId++;
         }
       }
+    },
+
+    addCharacterSpriteToTable : function(character, spawnAreaObject, i, j){
+      if(character.health > 0){
+        character.sprite = game.add.sprite(character.positionX ? character.positionX : spawnAreaObject.x + (j * 32),
+                                                character.positionY ? character.positionY : spawnAreaObject.y + (i * 32),
+                                                'spritesheetImage',
+                                                character.tileId,
+                                                this.characterGroup);
+        if(!character.positionX && !character.positionY){
+          character.positionX = character.sprite.x;
+          character.positionY = character.sprite.y;
+        }
+        character.sprite.tint = character.player.color;
+      }
     }
+
   },
 
   preload: function() {},
 
   create: function() {
     this.table.initTable();
-    for (k = 0; k < menuState.players.length; k++) {
-      this.table.spawnCharacters(menuState.players[k].spawnPoint, menuState
-        .players[k].characterDeck, menuState.players[k].color);
-      menuState.players[k].marker.drawMarker();
-    }
-    this.activePlayer = menuState.players[this.activePlayerId];
-    this.activePlayer.marker.toggleMarker();
-  },
+    this.initPlayersCharacters();
+    this.nextPlayer();
+    },
 
   update: function() {
     if (this.activePlayer.controls.leftKey.isDown && this.activePlayer.controls
@@ -110,14 +103,26 @@ var tableState = {
     }
   },
 
-  nextPlayer: function() {
-    if (++this.activePlayerId % menuState.players.length == 0) {
-      this.activePlayerId = 0;
+  initPlayersCharacters: function(){
+    for (k = 0; k < menuState.players.length; k++) {
+      this.table.spawnCharacters(menuState.players[k].spawnPoint, menuState
+        .players[k].characterDeck);
+      menuState.players[k].marker.drawMarker();
     }
-    this.activePlayer.marker.toggleMarker();
-    this.activePlayer = menuState.players[this.activePlayerId];
-    this.activePlayer.marker.toggleMarker();
-    this.activeCharacter = null;
+  },
+
+  nextPlayer: function() {
+
+      if (++this.activePlayerId % menuState.players.length == 0) {
+        this.activePlayerId = 0;
+      }
+
+      this.activePlayer = menuState.players[this.activePlayerId];
+      this.activePlayer.marker.toggleMarker();
+      this.activeCharacter = null;
+
+      game.stage.backgroundColor = this.activePlayer.color;
+
   },
 
   placeCharacter: function() {

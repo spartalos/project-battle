@@ -15,6 +15,7 @@ var Player = function(){
       this.markerRect.visible = false;
     },
     toggleMarker: function(){
+      console.log('toggle ' + this.team);
       this.markerRect.visible = !this.markerRect.visible;
     },
     moveMarker: function(floorLayer, moveX, moveY){
