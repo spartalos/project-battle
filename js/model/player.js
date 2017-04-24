@@ -8,19 +8,22 @@ var Player = function(){
     markerRect: null,
     drawMarker: function(){
       this.markerRect = game.add.graphics();
-      this.markerRect.lineStyle(2, 0x000000, 1);
+      this.markerRect.lineStyle(2, 0xFFD50D, 1);
       this.markerRect.drawRect(0, 0, 32, 32);
       this.markerRect.x = 256;
       this.markerRect.y = 256;
       this.markerRect.visible = false;
     },
     toggleMarker: function(){
-      console.log('toggle ' + this.team);
       this.markerRect.visible = !this.markerRect.visible;
     },
     moveMarker: function(floorLayer, moveX, moveY){
       this.markerRect.x = (floorLayer.getTileX(this.markerRect.x) + moveX) * 32;
       this.markerRect.y = (floorLayer.getTileY(this.markerRect.y) + moveY) * 32;
+      tableState.createLabels();
+      if (tableState.activeCharacter != null) {
+        tableState.activeCharacter.move(this.markerRect.x, this.markerRect.y);
+      }
     }
   };
 

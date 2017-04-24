@@ -4,6 +4,8 @@ var tableState = {
   activeCharacter: null,
   defendingCharacter: null,
   activePlayerId: 1,
+  nameLabel: null,
+  healthLabel: null,
 
   table: {
 
@@ -77,29 +79,24 @@ var tableState = {
       .leftKey.downDuration(50)) {
       this.activePlayer.controls.leftKey.reset();
       this.activePlayer.marker.moveMarker(this.table.floorLayer, -1, 0);
-      this.moveCharacterWithMarker();
     } else if (this.activePlayer.controls.rightKey.isDown && this.activePlayer
       .controls.rightKey.downDuration(50)) {
       this.activePlayer.controls.rightKey.reset();
       this.activePlayer.marker.moveMarker(this.table.floorLayer, 1, 0);
-      this.moveCharacterWithMarker();
     }
     if (this.activePlayer.controls.upKey.isDown && this.activePlayer.controls
       .upKey.downDuration(50)) {
       this.activePlayer.controls.upKey.reset();
       this.activePlayer.marker.moveMarker(this.table.floorLayer, 0, -1);
-      this.moveCharacterWithMarker();
     } else if (this.activePlayer.controls.downKey.isDown && this.activePlayer
       .controls.downKey.downDuration(50)) {
       this.activePlayer.controls.downKey.reset();
       this.activePlayer.marker.moveMarker(this.table.floorLayer, 0, 1);
-      this.moveCharacterWithMarker();
     }
     if (this.activePlayer.controls.actionKey.isDown && this.activePlayer.controls
       .actionKey.downDuration(1000)) {
       this.activePlayer.controls.actionKey.reset();
       this.placeCharacter();
-      //this.nextPlayer();
     }
   },
 
@@ -113,10 +110,12 @@ var tableState = {
 
   nextPlayer: function() {
 
-      if (++this.activePlayerId % menuState.players.length == 0) {
-        this.activePlayerId = 0;
-      }
+      console.log(this.activePlayerId);
 
+      this.activePlayerId = ++this.activePlayerId % menuState.players.length;
+
+      if(this.activePlayer)
+        this.activePlayer.marker.toggleMarker();
       this.activePlayer = menuState.players[this.activePlayerId];
       this.activePlayer.marker.toggleMarker();
       this.activeCharacter = null;
@@ -128,30 +127,37 @@ var tableState = {
   placeCharacter: function() {
     //Pick up a character
     if (this.activeCharacter == null) {
-
-      for (i = 0; i < this.activePlayer.characterDeck.length; i++) {
-        if (this.activePlayer.marker.markerRect.x == this.activePlayer.characterDeck[i].sprite.x
-           && this.activePlayer.marker.markerRect.y == this.activePlayer.characterDeck[i].sprite.y) {
-          break;
-        }
-      }
-      this.activeCharacter = this.activePlayer.characterDeck[i];
-
+      this.pickUpCharacter();
     } else { // Put down a character
+      this.putDownCharacter();
+    }
+  },
 
-        var movementObject = this.isLegalMove();
-
-        if(movementObject){
-          if(movementObject.cid != null){
-            this.defendingCharacter = movementObject;
-            game.state.start('arena');
-          }else{
-            this.activeCharacter.positionX = this.activeCharacter.sprite.x;
-            this.activeCharacter.positionY = this.activeCharacter.sprite.y;
-            this.nextPlayer();
-          }
+  findCharacterInTile: function(){
+    for (i = 0; i < this.activePlayer.characterDeck.length; i++) {
+      if (this.activePlayer.marker.markerRect.x == this.activePlayer.characterDeck[i].sprite.x
+         && this.activePlayer.marker.markerRect.y == this.activePlayer.characterDeck[i].sprite.y) {
+        return this.activePlayer.characterDeck[i];
       }
+    }
+  },
 
+  pickUpCharacter: function(){
+    this.activeCharacter = this.findCharacterInTile();
+  },
+
+  putDownCharacter: function(){
+    var movementObject = this.isLegalMove();
+
+    if(movementObject){
+      if(movementObject.cid != null){
+        this.defendingCharacter = movementObject;
+        game.state.start('arena');
+      }else{
+        this.activeCharacter.positionX = this.activeCharacter.sprite.x;
+        this.activeCharacter.positionY = this.activeCharacter.sprite.y;
+        this.nextPlayer();
+      }
     }
   },
 
@@ -188,13 +194,27 @@ var tableState = {
 
   },
 
-  /***
-  When a character is picked, it needs to be moved with the marker.
-  This method serves this purpose.
-  ***/
-  moveCharacterWithMarker: function() {
-    if (this.activeCharacter != null) {
-      this.activeCharacter.move(this.activePlayer.marker.markerRect.x, this.activePlayer.marker.markerRect.y);
-    }
+  createLabels: function(){
+
+      var characterOnTile = this.findCharacterInTile();
+
+      if(this.healthLabel && this.nameLabel && !this.activeCharacter){
+        this.healthLabel.destroy();
+        this.nameLabel.destroy();
+      }
+
+      if(characterOnTile){
+
+        this.healthLabel = game.add.text((game.world.width / 3) * 2,
+                                          game.world.height - game.world.height / 1.5,
+                                          'Health: ' + characterOnTile.health,
+                                          {font: '20px Arial', fill: '#ffffff'});
+        this.nameLabel = game.add.text((game.world.width / 3) * 2,
+                                          game.world.height - ((game.world.height / 1.5) + 20),
+                                          'Name: ' + characterOnTile.name,
+                                          {font: '20px Arial', fill: '#ffffff'});
+      }
+
   }
+
 };

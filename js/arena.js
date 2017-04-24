@@ -2,6 +2,10 @@ var arenaState = {
 
   attackingCharacter: null,
   defendingCharacter: null,
+  attackingHealthLabel: null,
+  attackingNameLabel: null,
+  defendingNameLabel: null,
+  defendingHealthLabel: null,
 
   arena: {
     tilemap: null,
@@ -61,6 +65,7 @@ var arenaState = {
     this.arena.initArena();
     this.arena.spawnCharacter('spawnA', this.attackingCharacter);
     this.arena.spawnCharacter('spawnB', this.defendingCharacter);
+    this.createAllLabel();
 
   },
 
@@ -73,6 +78,34 @@ var arenaState = {
     this.attackingCharacter.moveOnArena();
     this.defendingCharacter.moveOnArena();
 
+  },
+
+  createAllLabel: function(){
+    this.createLabels(this.attackingCharacter,
+       this.attackingHealthLabel,
+       this.attackingNameLabel,
+       game.world.width / 6,
+       game.world.height - game.world.height / 4);
+    this.createLabels(this.defendingCharacter,
+       this.defendingHealthLabel,
+        this.defendingNameLabel,
+        (game.world.width / 6) * 5,
+        game.world.height - game.world.height / 4);
+  },
+
+  createLabels: function(character, healthLabel, nameLabel, x, y){
+    if(this.healthLabel && this.nameLabel){
+      this.healthLabel.destroy();
+      this.nameLabel.destroy();
+    }
+    this.healthLabel = game.add.text(x,
+                                      y,
+                                      'Health: ' + character.health,
+                                      {font: '20px Arial', fill: '#ffffff'});
+    this.nameLabel = game.add.text(x,
+                                      y + 20,
+                                      'Name: ' + character.name,
+                                      {font: '20px Arial', fill: '#ffffff'});
   },
 
   collisionDetectionBetweenFloorCharacters: function(){
@@ -114,6 +147,9 @@ var arenaState = {
         }
       }
     );
+
+    this.createAllLabel();
+
   }
 
 };
