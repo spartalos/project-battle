@@ -110,14 +110,17 @@ var tableState = {
 
   nextPlayer: function() {
 
-      console.log(this.activePlayerId);
-
       this.activePlayerId = ++this.activePlayerId % menuState.players.length;
 
-      if(this.activePlayer)
-        this.activePlayer.marker.toggleMarker();
+      if(this.activePlayer){
+        if(this.activePlayer.marker.markerRect.visible){
+          this.activePlayer.marker.toggleMarker();
+        }
+      }
+
       this.activePlayer = menuState.players[this.activePlayerId];
       this.activePlayer.marker.toggleMarker();
+
       this.activeCharacter = null;
 
       game.stage.backgroundColor = this.activePlayer.color;
