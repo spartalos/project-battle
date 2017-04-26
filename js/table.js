@@ -6,6 +6,7 @@ var tableState = {
   activePlayerId: 1,
   nameLabel: null,
   healthLabel: null,
+  speedLabel: null,
 
   table: {
 
@@ -201,9 +202,10 @@ var tableState = {
 
       var characterOnTile = this.findCharacterInTile();
 
-      if(this.healthLabel && this.nameLabel && !this.activeCharacter){
+      if(this.healthLabel && this.nameLabel && this.speedLabel && !this.activeCharacter){
         this.healthLabel.destroy();
         this.nameLabel.destroy();
+        this.speedLabel.destroy();
       }
 
       if(characterOnTile){
@@ -215,6 +217,10 @@ var tableState = {
         this.nameLabel = game.add.text((game.world.width / 3) * 2,
                                           game.world.height - ((game.world.height / 1.5) + 20),
                                           'Name: ' + characterOnTile.name,
+                                          {font: '20px Arial', fill: '#ffffff'});
+        this.speedLabel = game.add.text((game.world.width / 3) * 2,
+                                          game.world.height - ((game.world.height / 1.5) - 20),
+                                          'Speed: ' + characterOnTile.moveSpeed,
                                           {font: '20px Arial', fill: '#ffffff'});
       }
 
