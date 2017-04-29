@@ -1,11 +1,7 @@
 var arenaState = {
 
-  attackingCharacter: null,
-  defendingCharacter: null,
-  attackingHealthLabel: null,
-  attackingNameLabel: null,
-  defendingNameLabel: null,
-  defendingHealthLabel: null,
+  attacker: null,
+  defender: null,
 
   arena: {
     tilemap: null,
@@ -59,13 +55,12 @@ var arenaState = {
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    this.attackingCharacter = tableState.activeCharacter;
-    this.defendingCharacter = tableState.defendingCharacter;
+    this.attacker = new ArenaRole().initRole(tableState.activeCharacter, 10, 10);
+    this.defender = new ArenaRole().initRole(tableState.defendingCharacter, game.world.width - 200, 10);
 
     this.arena.initArena();
-    this.arena.spawnCharacter('spawnA', this.attackingCharacter);
-    this.arena.spawnCharacter('spawnB', this.defendingCharacter);
-    this.createAllLabel();
+    this.arena.spawnCharacter('spawnA', this.attacker.character);
+    this.arena.spawnCharacter('spawnB', this.defender.character);
 
   },
 
@@ -75,80 +70,52 @@ var arenaState = {
     this.collisionDetectionBetweenBulletsFloor();
     this.collisionDetectionBetweenBulletsCharacters();
 
-    this.attackingCharacter.moveOnArena();
-    this.defendingCharacter.moveOnArena();
+    this.attacker.character.moveOnArena();
+    this.defender.character.moveOnArena();
 
-  },
-
-  createAllLabel: function(){
-    this.createLabels(this.attackingCharacter,
-       this.attackingHealthLabel,
-       this.attackingNameLabel,
-       game.world.width / 6,
-       game.world.height - game.world.height / 4);
-    this.createLabels(this.defendingCharacter,
-       this.defendingHealthLabel,
-        this.defendingNameLabel,
-        (game.world.width / 6) * 5,
-        game.world.height - game.world.height / 4);
-  },
-
-  createLabels: function(character, healthLabel, nameLabel, x, y){
-    if(this.healthLabel && this.nameLabel){
-      this.healthLabel.destroy();
-      this.nameLabel.destroy();
-    }
-    this.healthLabel = game.add.text(x,
-                                      y,
-                                      'Health: ' + character.health,
-                                      {font: '20px Arial', fill: '#ffffff'});
-    this.nameLabel = game.add.text(x,
-                                      y + 20,
-                                      'Name: ' + character.name,
-                                      {font: '20px Arial', fill: '#ffffff'});
   },
 
   collisionDetectionBetweenFloorCharacters: function(){
-      game.physics.arcade.collide(this.attackingCharacter.sprite, this.arena.floorLayer);
-      game.physics.arcade.collide(this.defendingCharacter.sprite, this.arena.floorLayer);
+      game.physics.arcade.collide(this.attacker.character.sprite, this.arena.floorLayer);
+      game.physics.arcade.collide(this.defender.character.sprite, this.arena.floorLayer);
   },
 
   collisionDetectionBetweenBulletsFloor: function(){
-    game.physics.arcade.collide(this.attackingCharacter.weapon.bullets, this.arena.floorLayer, function(bullet, floor){
+    game.physics.arcade.collide(this.attacker.character.weapon.bullets, this.arena.floorLayer, function(bullet, floor){
       bullet.kill();
     });
 
-    game.physics.arcade.collide(this.defendingCharacter.weapon.bullets, this.arena.floorLayer, function(bullet, floor){
+    game.physics.arcade.collide(this.defender.character.weapon.bullets, this.arena.floorLayer, function(bullet, floor){
       bullet.kill();
     });
   },
 
   collisionDetectionBetweenBulletsCharacters: function(){
-    game.physics.arcade.collide(this.attackingCharacter.weapon.bullets,
-                                this.defendingCharacter.sprite,
+    game.physics.arcade.collide(this.attacker.character.weapon.bullets,
+                                this.defender.character.sprite,
       function(sprite, bullet){
         bullet.kill();
-        arenaState.defendingCharacter.health -= arenaState.attackingCharacter.damage;
-        if(arenaState.defendingCharacter.health < 0){
-          arenaState.attackingCharacter.positionX = arenaState.defendingCharacter.positionX;
-          arenaState.attackingCharacter.positionY = arenaState.defendingCharacter.positionY;
+        arenaState.defender.character.health -= arenaState.attacker.character.damage;
+        arenaState.defender.createLabel();
+        if(arenaState.defender.character.health < 0){
+          arenaState.attacker.character.positionX = arenaState.defender.character.positionX;
+          arenaState.attacker.character.positionY = arenaState.defender.character.positionY;
           game.state.start('table');
         }
       }
     );
 
-    game.physics.arcade.collide(this.defendingCharacter.weapon.bullets,
-                                this.attackingCharacter.sprite,
+    game.physics.arcade.collide(this.defender.character.weapon.bullets,
+                                this.attacker.character.sprite,
       function(sprite, bullet){
         bullet.kill();
-        arenaState.attackingCharacter.health -= arenaState.defendingCharacter.damage;
-        if(arenaState.attackingCharacter.health < 0){
+        arenaState.attacker.character.health -= arenaState.defender.character.damage;
+        arenaState.attacker.createLabel();
+        if(arenaState.attacker.character.health < 0){
           game.state.start('table');
         }
       }
     );
-
-    this.createAllLabel();
 
   }
 
