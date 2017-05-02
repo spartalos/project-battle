@@ -1,3 +1,7 @@
-characters = '[{"id": "0","name": "Warrior","health": 100,"damage": 20, "moveSpeed": 1, "type": "close","tileId": 0, "weaponTileId": 189},'
-  + '{"id": "1","name": "Mage","health": 50,"damage": 40, "moveSpeed": 2, "type": "ranged","tileId": 6, "weaponTileId": 189},'
-  + '{"id": "2","name": "Paladin","health": 100,"damage": 40, "moveSpeed": 2, "type": "ranged","tileId": 5, "weaponTileId": 189}]';
+characters = '['
+  + '{"id": "0","name": "Warrior","health": 100,"damage": 20, "moveSpeed": 3, "arenaMoveSpeed": 200,'
+  + '"bulletDistance": 50, "bulletFireRate": 300, "bulletFireSpeed": 500, "type": "close","tileId": 0, "weaponTileId": 189},'
+  + '{"id": "1","name": "Mage","health": 50,"damage": 40, "moveSpeed": 2, "arenaMoveSpeed": 200,'
+  + '"bulletDistance": 0, "bulletFireRate": 300, "bulletFireSpeed": 300, "type": "ranged","tileId": 6, "weaponTileId": 189},'
+  + '{"id": "2","name": "Heavy","health": 200,"damage": 30, "moveSpeed": 1, "arenaMoveSpeed": 150,'
+  + '"bulletDistance": 50, "bulletFireRate": 300, "bulletFireSpeed": 500, "type": "close","tileId": 5, "weaponTileId": 189}]';

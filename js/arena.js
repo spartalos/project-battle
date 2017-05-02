@@ -97,7 +97,7 @@ var arenaState = {
         bullet.kill();
         arenaState.defender.character.health -= arenaState.attacker.character.damage;
         arenaState.defender.createLabel();
-        if(arenaState.defender.character.health < 0){
+        if(arenaState.defender.character.health <= 0){
           arenaState.attacker.character.positionX = arenaState.defender.character.positionX;
           arenaState.attacker.character.positionY = arenaState.defender.character.positionY;
           game.state.start('table');
@@ -111,7 +111,7 @@ var arenaState = {
         bullet.kill();
         arenaState.attacker.character.health -= arenaState.defender.character.damage;
         arenaState.attacker.createLabel();
-        if(arenaState.attacker.character.health < 0){
+        if(arenaState.attacker.character.health <= 0){
           game.state.start('table');
         }
       }
