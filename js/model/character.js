@@ -90,7 +90,7 @@ var Character = function() {
   this.moveOnArena = function(){
     this.sprite.body.velocity.x = 0;
     if (this.player.controls.upKey.isDown && this.sprite.body.blocked.down) {
-        this.sprite.body.velocity.y -= 200;
+        this.sprite.body.velocity.y -= 250;
     }
     if (this.player.controls.leftKey.isDown) {
       //Mirroring sprite on left movement

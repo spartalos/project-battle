@@ -75,6 +75,11 @@ var arenaState = {
 
   },
 
+  animateHurt: function(role){
+    game.add.tween(role.character.sprite).to(
+        { tint: 0xFFD50D }, 300, Phaser.Easing.Linear.None, true, 0, 0, true);
+  },
+
   collisionDetectionBetweenFloorCharacters: function(){
       game.physics.arcade.collide(this.attacker.character.sprite, this.arena.floorLayer);
       game.physics.arcade.collide(this.defender.character.sprite, this.arena.floorLayer);
@@ -96,6 +101,7 @@ var arenaState = {
       function(sprite, bullet){
         bullet.kill();
         arenaState.defender.character.health -= arenaState.attacker.character.damage;
+        arenaState.animateHurt(arenaState.defender);
         arenaState.defender.createLabel();
         if(arenaState.defender.character.health <= 0){
           arenaState.attacker.character.positionX = arenaState.defender.character.positionX;
@@ -110,6 +116,7 @@ var arenaState = {
       function(sprite, bullet){
         bullet.kill();
         arenaState.attacker.character.health -= arenaState.defender.character.damage;
+        arenaState.animateHurt(arenaState.attacker);
         arenaState.attacker.createLabel();
         if(arenaState.attacker.character.health <= 0){
           game.state.start('table');

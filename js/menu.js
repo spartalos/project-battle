@@ -24,6 +24,8 @@ var menuState = {
     startGameLabel.inputEnabled = true;
     startGameLabel.events.onInputDown.add(this.startGameListener, this);
 
+    this.rescale(1.1,1.1);
+
   },
 
   update: function(){
@@ -35,7 +37,7 @@ var menuState = {
     this.players.push(new Player()
                       .withTeam('teamA')
                       .withControls('keyboard')
-                      .withColor('0x486F82')
+                      .withColor('0xe0e4f1')
                       .withSpawnPoint('spawnA')
                       .addCharacter(0)
                       .addCharacter(0)
@@ -48,8 +50,8 @@ var menuState = {
                       .addCharacter(2)
                       .addCharacter(1)
                       .addCharacter(1)
-                      .addCharacter(0)
-                      .addCharacter(0)
+                      .addCharacter(3)
+                      .addCharacter(3)
                       .addCharacter(0)
                       .addCharacter(0)
                       .addCharacter(0)
@@ -62,7 +64,7 @@ var menuState = {
                                                 Phaser.Keyboard.J,
                                                 Phaser.Keyboard.L,
                                                 Phaser.Keyboard.P)
-                      .withColor('0xA44146')
+                      .withColor('0xe07f7f')
                       .withSpawnPoint('spawnB')
                       .addCharacter(0)
                       .addCharacter(0)
@@ -75,8 +77,8 @@ var menuState = {
                       .addCharacter(2)
                       .addCharacter(1)
                       .addCharacter(1)
-                      .addCharacter(0)
-                      .addCharacter(0)
+                      .addCharacter(3)
+                      .addCharacter(3)
                       .addCharacter(0)
                       .addCharacter(0)
                       .addCharacter(0)
