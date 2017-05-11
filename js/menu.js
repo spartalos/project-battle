@@ -49,7 +49,7 @@ var menuState = {
 
     this.players.push(new Player()
                       .withTeam('teamB')
-                      .withControls('keyboard', Phaser.Keyboard.I,
+                      .withControls('default', Phaser.Keyboard.I,
                                                 Phaser.Keyboard.K,
                                                 Phaser.Keyboard.J,
                                                 Phaser.Keyboard.L,

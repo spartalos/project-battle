@@ -29,13 +29,14 @@ var Player = function(){
   };
 
   this.controls = {
-    upKey: null, downKey: null, leftKey: null, rightKey: null, actionKey: null,
-    initKeyboard: function(upKey, downKey, leftKey, rightKey, actionKey){
+    upKey: null, downKey: null, leftKey: null, rightKey: null, actionKey: null, pointer: null,
+    initKeyboard: function(upKey, downKey, leftKey, rightKey, actionKey, pointer){
       this.upKey = game.input.keyboard.addKey(upKey != null ? upKey : Phaser.Keyboard.W);
       this.downKey = game.input.keyboard.addKey(downKey != null ? downKey : Phaser.Keyboard.S);
       this.leftKey = game.input.keyboard.addKey(leftKey != null ? leftKey : Phaser.Keyboard.A);
       this.rightKey = game.input.keyboard.addKey(rightKey != null ? rightKey : Phaser.Keyboard.D);
       this.actionKey = game.input.keyboard.addKey(actionKey != null ? actionKey : Phaser.Keyboard.SPACEBAR);
+      this.pointer = pointer;
     }
   };
 
@@ -50,6 +51,16 @@ var Player = function(){
 
   this.withControls = function(type, upKey, downKey, leftKey, rightKey, actionKey){
     if(type == 'keyboard'){
+      this.controls.initKeyboard(upKey, downKey, leftKey, rightKey, actionKey, game.input.activePointer);
+    }else if(type == 'xbox360'){
+      game.input.gamepad.start();
+      var pad = game.input.gamepad.pad1;
+      this.controls.initKeyboard(pad.getButton(Phaser.Gamepad.XBOX360_DPAD_UP),
+      pad.getButton(Phaser.Gamepad.XBOX360_DPAD_DOWN),
+      pad.getButton(Phaser.Gamepad.XBOX360_DPAD_LEFT),
+      pad.getButton(Phaser.Gamepad.XBOX360_DPAD_RIGHT),
+      pad.getButton(Phaser.Gamepad.XBOX360_B));
+    }else if(type == 'default'){
       this.controls.initKeyboard(upKey, downKey, leftKey, rightKey, actionKey);
     }
     return this;

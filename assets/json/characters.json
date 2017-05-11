@@ -1,5 +1,5 @@
 characters = '['
-  + '{"id": "0","name": "Warrior","health": 100,"damage": 10, "moveSpeed": 10, "arenaMoveSpeed": 200,'
+  + '{"id": "0","name": "Warrior","health": 100,"damage": 10, "moveSpeed": 3, "arenaMoveSpeed": 200,'
   + '"bulletDistance": 50, "bulletFireRate": 300, "bulletFireSpeed": 500, "type": "close","tileId": 0, "weaponTileId": 210},'
   + '{"id": "1","name": "Mage","health": 50,"damage": 40, "moveSpeed": 2, "arenaMoveSpeed": 200,'
   + '"bulletDistance": 0, "bulletFireRate": 300, "bulletFireSpeed": 300, "type": "ranged","tileId": 6, "weaponTileId": 189},'

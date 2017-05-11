@@ -7,6 +7,7 @@ var tableState = {
   nameLabel: null,
   healthLabel: null,
   speedLabel: null,
+  infoLabel: null,
 
   table: {
 
@@ -177,18 +178,6 @@ var tableState = {
 
   isLegalMove: function(){
 
-    //check if there is a teammate or an enemy on the tile
-    for(i = 0; i < menuState.players.length; i++){
-      for(j = 0; j < menuState.players[i].characterDeck.length; j++){
-        var isTeamMate = menuState.players[i].characterDeck[j].isItTeamMate(this.activeCharacter);
-        if(isTeamMate == true){
-          return false;
-        }else if(isTeamMate != null){
-          return menuState.players[i].characterDeck[j];
-        }
-      }
-    }
-
     var distanceX = this.activePlayer.marker.markerRect.x > this.activeCharacter.positionX ?
      (this.activePlayer.marker.markerRect.x - this.activeCharacter.positionX) / 32
      : (this.activeCharacter.positionX - this.activePlayer.marker.markerRect.x) / 32;
@@ -208,6 +197,19 @@ var tableState = {
     if (this.activeCharacter.moveSpeed >= distanceX
         && this.activeCharacter.moveSpeed >= distanceY
         && destinationTile) {
+
+      //check if there is a teammate or an enemy on the tile
+      for(i = 0; i < menuState.players.length; i++){
+        for(j = 0; j < menuState.players[i].characterDeck.length; j++){
+          var isTeamMate = menuState.players[i].characterDeck[j].isItTeamMate(this.activeCharacter);
+          if(isTeamMate == true){
+            return false;
+          }else if(isTeamMate != null){
+            return menuState.players[i].characterDeck[j];
+          }
+        }
+      }
+
       this.captureDestinationTile(startTile, destinationTile);
       return true;
     }
@@ -222,6 +224,8 @@ var tableState = {
       if (startTile.x * 32 == this.table.objectives[i].x
         && startTile.y * 32 == this.table.objectives[i].y) {
           this.activePlayer.looseObjective();
+          this.createInfoLabel(this.activePlayer.team + ' ' + ' loose an objective.\n'
+        + (this.table.objectives.length - this.activePlayer.capturedObjectives) + ' objective more to win.');
         break;
       }
     }
@@ -230,6 +234,8 @@ var tableState = {
       if (destinationTile.x * 32 == this.table.objectives[i].x
         && destinationTile.y * 32 == this.table.objectives[i].y) {
           this.activePlayer.captureObjective();
+          this.createInfoLabel(this.activePlayer.team + ' won an objective.\n' +
+          (this.table.objectives.length - this.activePlayer.capturedObjectives) + ' objective more to win.');
           if(this.activePlayer.capturedObjectives == this.table.objectives.length){
             game.state.start('menu');
           }
@@ -247,19 +253,29 @@ var tableState = {
       if(characterOnTile){
 
         this.healthLabel = game.add.text((game.world.width / 3) * 2,
-                                          game.world.height - game.world.height / 1.5,
+                                          game.world.height - game.world.height / 1.2,
                                           'Health: ' + characterOnTile.health,
                                           {font: '20px Arial', fill: '#ffffff'});
         this.nameLabel = game.add.text((game.world.width / 3) * 2,
-                                          game.world.height - ((game.world.height / 1.5) + 20),
+                                          game.world.height - ((game.world.height / 1.2) + 20),
                                           'Name: ' + characterOnTile.name,
                                           {font: '20px Arial', fill: '#ffffff'});
         this.speedLabel = game.add.text((game.world.width / 3) * 2,
-                                          game.world.height - ((game.world.height / 1.5) - 20),
+                                          game.world.height - ((game.world.height / 1.2) - 20),
                                           'Speed: ' + characterOnTile.moveSpeed,
                                           {font: '20px Arial', fill: '#ffffff'});
       }
 
+  },
+
+  createInfoLabel: function(info){
+    if(this.infoLabel){
+      this.infoLabel.destroy();
+    }
+    this.infoLabel = game.add.text((game.world.width / 3) * 2,
+                                      game.world.height - ((game.world.height / 1.2) - 60),
+                                      info,
+                                      {font: '20px Arial', fill: '#ffffff'});
   },
 
   destroyLabels: function(){

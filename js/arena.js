@@ -38,6 +38,7 @@ var arenaState = {
      game.physics.arcade.enable(character.sprite);
      character.sprite.tint = character.player.color;
      character.sprite.anchor.setTo(.5, .5);
+     character.sprite.body.enable = true;
      character.sprite.body.bounce.y = 0;
      character.sprite.body.gravity.y = 300;
      character.sprite.body.collideWorldBounds = true;
@@ -53,10 +54,10 @@ var arenaState = {
 
   create: function(){
 
-    game.physics.startSystem(Phaser.Physics.ARCADE);
-
     this.attacker = new ArenaRole().initRole(tableState.activeCharacter, 10, 10);
     this.defender = new ArenaRole().initRole(tableState.defendingCharacter, game.world.width - 200, 10);
+
+    game.physics.startSystem(Phaser.Physics.ARCADE);
 
     this.arena.initArena();
     this.arena.spawnCharacter('spawnA', this.attacker.character);
@@ -66,6 +67,7 @@ var arenaState = {
 
   update: function(){
 
+    this.collisionDetectionBetweenCharacters();
     this.collisionDetectionBetweenFloorCharacters();
     this.collisionDetectionBetweenBulletsFloor();
     this.collisionDetectionBetweenBulletsCharacters();
@@ -79,6 +81,19 @@ var arenaState = {
     var tween = game.add.tween(role.character.sprite).to(
         { tint: 0xFFD50D }, 100, Phaser.Easing.Linear.None, true);
         tween.yoyo(10, 100);
+  },
+
+  animateWin: function(){
+    var tween = game.add.tween(arenaState.attacker.character.sprite.scale).to(
+        { x: 5, y: 5}, 3000, Phaser.Easing.Linear.None, true);
+    tween.onComplete.add(function(){
+      game.state.start('table');
+    }, this);
+  },
+
+  collisionDetectionBetweenCharacters: function(){
+      game.physics.arcade.collide(this.attacker.character.sprite, this.defender.character.sprite);
+      game.physics.arcade.collide(this.defender.character.sprite, this.attacker.character.sprite);
   },
 
   collisionDetectionBetweenFloorCharacters: function(){
@@ -109,7 +124,7 @@ var arenaState = {
           arenaState.attacker.character.positionY = arenaState.defender.character.positionY;
           arenaState.attacker.character.player.captureObjective();
           arenaState.defender.character.player.looseObjective();
-          game.state.start('table');
+          arenaState.animateWin();
         }
       }
     );
