@@ -60,18 +60,7 @@
                  "type":"objective",
                  "visible":true,
                  "width":32,
-                 "x":95,
-                 "y":95
-                }, 
-                {
-                 "height":32,
-                 "id":11,
-                 "name":"Objective",
-                 "rotation":0,
-                 "type":"objective",
-                 "visible":true,
-                 "width":32,
-                 "x":224,
+                 "x":96,
                  "y":96
                 }, 
                 {
@@ -186,7 +175,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "width":16,
          "x":0,
          "y":0

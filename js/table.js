@@ -16,6 +16,7 @@ var tableState = {
     itemLayer: null,
     characterGroup: null,
     objects: null,
+    objectives: [],
 
     initTable: function() {
       this.tilemap = game.add.tilemap('tableTileMap');
@@ -24,7 +25,16 @@ var tableState = {
       this.floorLayer = this.tilemap.createLayer('FloorLayer');
       this.itemLayer = this.tilemap.createLayer('ItemLayer');
       this.objects = this.tilemap.objects['ObjectLayer'];
+      this.initObjectives();
       this.characterGroup = game.add.group();
+    },
+
+    initObjectives: function(){
+      for (i = 0; i < this.objects.length; i++) {
+        if (this.objects[i].type == 'objective') {
+          this.objectives.push(this.objects[i]);
+        }
+      }
     },
 
     spawnCharacters: function(spawnId, characterDeck, color) {
@@ -167,6 +177,7 @@ var tableState = {
 
   isLegalMove: function(){
 
+    //check if there is a teammate or an enemy on the tile
     for(i = 0; i < menuState.players.length; i++){
       for(j = 0; j < menuState.players[i].characterDeck.length; j++){
         var isTeamMate = menuState.players[i].characterDeck[j].isItTeamMate(this.activeCharacter);
@@ -178,19 +189,26 @@ var tableState = {
       }
     }
 
-    var moveX = this.activePlayer.marker.markerRect.x > this.activeCharacter.positionX ?
+    var distanceX = this.activePlayer.marker.markerRect.x > this.activeCharacter.positionX ?
      (this.activePlayer.marker.markerRect.x - this.activeCharacter.positionX) / 32
-     : (this.activeCharacter.positionX- this.activePlayer.marker.markerRect.x) / 32;
+     : (this.activeCharacter.positionX - this.activePlayer.marker.markerRect.x) / 32;
 
-    var moveY = this.activePlayer.marker.markerRect.y > this.activeCharacter.positionY ?
+    var distanceY = this.activePlayer.marker.markerRect.y > this.activeCharacter.positionY ?
      (this.activePlayer.marker.markerRect.y - this.activeCharacter.positionY) / 32
      : (this.activeCharacter.positionY - this.activePlayer.marker.markerRect.y) / 32;
 
-    if (this.activeCharacter.moveSpeed >= moveX
-        && this.activeCharacter.moveSpeed >= moveY
-        && this.table.tilemap.getTile(this.activeCharacter.sprite.x / 32,
-                                      this.activeCharacter.sprite.y / 32,
-                                       this.table.floorLayer)) {
+    var startTile = this.table.tilemap.getTile(this.activeCharacter.positionX / 32,
+                                  this.activeCharacter.positionY / 32,
+                                   this.table.floorLayer);
+
+    var destinationTile = this.table.tilemap.getTile(this.activeCharacter.sprite.x / 32,
+                                  this.activeCharacter.sprite.y / 32,
+                                   this.table.floorLayer);
+
+    if (this.activeCharacter.moveSpeed >= distanceX
+        && this.activeCharacter.moveSpeed >= distanceY
+        && destinationTile) {
+      this.captureDestinationTile(startTile, destinationTile);
       return true;
     }
 
@@ -198,15 +216,33 @@ var tableState = {
 
   },
 
+  captureDestinationTile: function(startTile, destinationTile){
+
+    for (i = 0; i < this.table.objectives.length; i++) {
+      if (startTile.x * 32 == this.table.objectives[i].x
+        && startTile.y * 32 == this.table.objectives[i].y) {
+          this.activePlayer.looseObjective();
+        break;
+      }
+    }
+
+    for (i = 0; i < this.table.objectives.length; i++) {
+      if (destinationTile.x * 32 == this.table.objectives[i].x
+        && destinationTile.y * 32 == this.table.objectives[i].y) {
+          this.activePlayer.captureObjective();
+          if(this.activePlayer.capturedObjectives == this.table.objectives.length){
+            game.state.start('menu');
+          }
+        break;
+      }
+    }
+  },
+
   createLabels: function(){
 
       var characterOnTile = this.findCharacterInTile();
 
-      if(this.healthLabel && this.nameLabel && this.speedLabel && !this.activeCharacter){
-        this.healthLabel.destroy();
-        this.nameLabel.destroy();
-        this.speedLabel.destroy();
-      }
+      this.destroyLabels();
 
       if(characterOnTile){
 
@@ -224,6 +260,14 @@ var tableState = {
                                           {font: '20px Arial', fill: '#ffffff'});
       }
 
+  },
+
+  destroyLabels: function(){
+    if(this.healthLabel && this.nameLabel && this.speedLabel){
+      this.healthLabel.destroy();
+      this.nameLabel.destroy();
+      this.speedLabel.destroy();
+    }
   }
 
 };

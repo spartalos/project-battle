@@ -3,6 +3,7 @@ var Player = function(){
   this.team = null;
   this.color = '0x2A4F6E';
   this.spawnPoint = null;
+  this.capturedObjectives = 0;
 
   this.marker = {
     markerRect: null,
@@ -15,7 +16,6 @@ var Player = function(){
       this.markerRect.visible = false;
     },
     toggleMarker: function(){
-      console.log('Someone toggling the marker' );
       this.markerRect.visible = !this.markerRect.visible;
     },
     moveMarker: function(floorLayer, moveX, moveY){
@@ -73,6 +73,16 @@ var Player = function(){
   this.addCharacter = function(id){
     this.characterDeck.push(new Character().initFromJSON(id).addToTeam(this.team).addToPlayer(this));
     return this;
+  };
+
+  this.captureObjective = function(){
+    this.capturedObjectives++;
+    console.log(this.team + ' captured ' + this.capturedObjectives + ' objectives.');
+  };
+
+  this.looseObjective = function(){
+    this.capturedObjectives--;
+    console.log(this.team + ' captured ' + this.capturedObjectives + ' objectives.');
   };
 
   this.build = function(){

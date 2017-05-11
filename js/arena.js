@@ -76,8 +76,9 @@ var arenaState = {
   },
 
   animateHurt: function(role){
-    game.add.tween(role.character.sprite).to(
-        { tint: 0xFFD50D }, 300, Phaser.Easing.Linear.None, true, 0, 0, true);
+    var tween = game.add.tween(role.character.sprite).to(
+        { tint: 0xFFD50D }, 100, Phaser.Easing.Linear.None, true);
+        tween.yoyo(10, 100);
   },
 
   collisionDetectionBetweenFloorCharacters: function(){
@@ -106,6 +107,8 @@ var arenaState = {
         if(arenaState.defender.character.health <= 0){
           arenaState.attacker.character.positionX = arenaState.defender.character.positionX;
           arenaState.attacker.character.positionY = arenaState.defender.character.positionY;
+          arenaState.attacker.character.player.captureObjective();
+          arenaState.defender.character.player.looseObjective();
           game.state.start('table');
         }
       }

@@ -1,5 +1,13 @@
 var loadState = {
 
+  rescale: function(hScale, vScale){
+    game.scale.setResizeCallback(function(){
+      game.scale.setUserScale(hScale, vScale);
+    }, game);
+
+    game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+  },
+
   preload: function(){
 
     game.stage.backgroundColor = '#2d2d2d';
@@ -16,6 +24,7 @@ var loadState = {
   },
 
   create: function(){
+    this.rescale(1.1,1.1);
     game.state.start('menu');
   },
 

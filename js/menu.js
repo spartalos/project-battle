@@ -2,14 +2,6 @@ var menuState = {
 
   players: [],
 
-  rescale: function(hScale, vScale){
-    game.scale.setResizeCallback(function(){
-      game.scale.setUserScale(hScale, vScale);
-    }, game);
-
-    game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
-  },
-
   preload: function (){
 
   },
@@ -23,8 +15,6 @@ var menuState = {
 
     startGameLabel.inputEnabled = true;
     startGameLabel.events.onInputDown.add(this.startGameListener, this);
-
-    this.rescale(1.1,1.1);
 
   },
 
