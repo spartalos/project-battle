@@ -16,6 +16,7 @@ var Character = function() {
   this.arenaMoveSpeed = null,
   this.positionX = null;
   this.positionY = null;
+  this.isPlacedOnObjective = null;
   this.team = null;
   this.player = null;
 
@@ -80,6 +81,15 @@ var Character = function() {
     this.weapon.trackSprite(this.sprite, 0, 0, true);
 
     return this;
+  };
+
+  this.onObjective = function(on){
+    if(on){
+      this.player.captureObjective();
+    }else{
+      this.player.looseObjective();
+    }
+    this.isPlacedOnObjective = on;
   };
 
   this.move = function(x, y) {

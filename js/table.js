@@ -26,11 +26,12 @@ var tableState = {
       this.floorLayer = this.tilemap.createLayer('FloorLayer');
       this.itemLayer = this.tilemap.createLayer('ItemLayer');
       this.objects = this.tilemap.objects['ObjectLayer'];
-      this.initObjectives();
+      if(this.objectives.length == 0) this.initObjectives();
       this.characterGroup = game.add.group();
     },
 
     initObjectives: function(){
+
       for (i = 0; i < this.objects.length; i++) {
         if (this.objects[i].type == 'objective') {
           this.objectives.push(this.objects[i]);
@@ -223,7 +224,7 @@ var tableState = {
     for (i = 0; i < this.table.objectives.length; i++) {
       if (startTile.x * 32 == this.table.objectives[i].x
         && startTile.y * 32 == this.table.objectives[i].y) {
-          this.activePlayer.looseObjective();
+          this.activeCharacter.onObjective(false);
           this.createInfoLabel(this.activePlayer.team + ' ' + ' loose an objective.\n'
         + (this.table.objectives.length - this.activePlayer.capturedObjectives) + ' objective more to win.');
         break;
@@ -233,7 +234,7 @@ var tableState = {
     for (i = 0; i < this.table.objectives.length; i++) {
       if (destinationTile.x * 32 == this.table.objectives[i].x
         && destinationTile.y * 32 == this.table.objectives[i].y) {
-          this.activePlayer.captureObjective();
+          this.activeCharacter.onObjective(true);
           this.createInfoLabel(this.activePlayer.team + ' won an objective.\n' +
           (this.table.objectives.length - this.activePlayer.capturedObjectives) + ' objective more to win.');
           if(this.activePlayer.capturedObjectives == this.table.objectives.length){

@@ -84,11 +84,11 @@ var arenaState = {
   },
 
   animateWin: function(){
+    game.add.tween(arenaState.attacker.character.sprite).to(
+        { x: game.world.width / 2, y: game.world.height / 2}, 3000, Phaser.Easing.Linear.None, true);
     var tween = game.add.tween(arenaState.attacker.character.sprite.scale).to(
         { x: 5, y: 5}, 3000, Phaser.Easing.Linear.None, true);
-    tween.onComplete.add(function(){
-      game.state.start('table');
-    }, this);
+    tween.onComplete.add(this.resumeTableState, this);
   },
 
   collisionDetectionBetweenCharacters: function(){
@@ -120,11 +120,7 @@ var arenaState = {
         arenaState.animateHurt(arenaState.defender);
         arenaState.defender.createLabel();
         if(arenaState.defender.character.health <= 0){
-          arenaState.attacker.character.positionX = arenaState.defender.character.positionX;
-          arenaState.attacker.character.positionY = arenaState.defender.character.positionY;
-          arenaState.attacker.character.player.captureObjective();
-          arenaState.defender.character.player.looseObjective();
-          arenaState.animateWin();
+          arenaState.attackerDefeatsDefender();
         }
       }
     );
@@ -137,11 +133,27 @@ var arenaState = {
         arenaState.animateHurt(arenaState.attacker);
         arenaState.attacker.createLabel();
         if(arenaState.attacker.character.health <= 0){
-          game.state.start('table');
+          arenaState.resumeTableState();
         }
       }
     );
 
+  },
+
+  attackerDefeatsDefender: function(){
+    this.attacker.character.positionX = this.defender.character.positionX;
+    this.attacker.character.positionY = this.defender.character.positionY;
+    if(this.defender.character.isPlacedOnObjective){
+      this.attacker.character.onObjective(true);
+      this.defender.character.onObjective(false);
+    }else if(this.attacker.character.isPlacedOnObjective){
+      this.attacker.character.onObjective(false);
+    }
+    this.animateWin();
+  },
+
+  resumeTableState: function(){
+    game.state.start('table');
   }
 
 };

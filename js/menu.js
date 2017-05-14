@@ -26,7 +26,7 @@ var menuState = {
 
     this.players.push(new Player()
                       .withTeam('teamA')
-                      .withControls('keyboard')
+                      .withControls('default')
                       .withColor('0xe0e4f1')
                       .withSpawnPoint('spawnA')
                       .addCharacter(0)
