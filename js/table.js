@@ -226,7 +226,7 @@ var tableState = {
         && startTile.y * 32 == this.table.objectives[i].y) {
           this.activeCharacter.onObjective(false);
           this.createInfoLabel(this.activePlayer.team + ' ' + ' loose an objective.\n'
-        + (this.table.objectives.length - this.activePlayer.capturedObjectives) + ' objective more to win.');
+        + (this.table.objectives.length - this.activePlayer.capturedObjectives) + ' objective remaining.');
         break;
       }
     }
@@ -236,7 +236,7 @@ var tableState = {
         && destinationTile.y * 32 == this.table.objectives[i].y) {
           this.activeCharacter.onObjective(true);
           this.createInfoLabel(this.activePlayer.team + ' won an objective.\n' +
-          (this.table.objectives.length - this.activePlayer.capturedObjectives) + ' objective more to win.');
+          (this.table.objectives.length - this.activePlayer.capturedObjectives) + ' objective remaining.');
           if(this.activePlayer.capturedObjectives == this.table.objectives.length){
             game.state.start('menu');
           }
@@ -256,15 +256,15 @@ var tableState = {
         this.healthLabel = game.add.text((game.world.width / 3) * 2,
                                           game.world.height - game.world.height / 1.2,
                                           'Health: ' + characterOnTile.health,
-                                          {font: '20px Arial', fill: '#ffffff'});
+                                          {font: '24px Arial', fill: '#ffffff'});
         this.nameLabel = game.add.text((game.world.width / 3) * 2,
-                                          game.world.height - ((game.world.height / 1.2) + 20),
+                                          game.world.height - ((game.world.height / 1.2) + 24),
                                           'Name: ' + characterOnTile.name,
-                                          {font: '20px Arial', fill: '#ffffff'});
+                                          {font: '24px Arial', fill: '#ffffff'});
         this.speedLabel = game.add.text((game.world.width / 3) * 2,
-                                          game.world.height - ((game.world.height / 1.2) - 20),
+                                          game.world.height - ((game.world.height / 1.2) - 24),
                                           'Speed: ' + characterOnTile.moveSpeed,
-                                          {font: '20px Arial', fill: '#ffffff'});
+                                          {font: '24px Arial', fill: '#ffffff'});
       }
 
   },
@@ -274,9 +274,9 @@ var tableState = {
       this.infoLabel.destroy();
     }
     this.infoLabel = game.add.text((game.world.width / 3) * 2,
-                                      game.world.height - ((game.world.height / 1.2) - 60),
+                                      game.world.height - ((game.world.height / 1.2) - 72),
                                       info,
-                                      {font: '20px Arial', fill: '#ffffff'});
+                                      {font: '24px Arial', fill: '#ffffff'});
   },
 
   destroyLabels: function(){

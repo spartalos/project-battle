@@ -8,6 +8,13 @@ var loadState = {
     game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
   },
 
+  fullscreen: function(){
+    game.scale.pageAlignHorizontally = true;
+    game.scale.pageAlignVertically = true;
+    game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+    this.game.scale.refresh();
+  },
+
   preload: function(){
 
     game.stage.backgroundColor = '#2d2d2d';
@@ -24,7 +31,8 @@ var loadState = {
   },
 
   create: function(){
-    this.rescale(1.1,1.1);
+    //this.rescale(1.1,1.1);
+    this.fullscreen();
     game.state.start('menu');
   },
 

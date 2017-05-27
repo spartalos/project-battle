@@ -11,8 +11,8 @@ var Player = function(){
       this.markerRect = game.add.graphics();
       this.markerRect.lineStyle(2, 0xFFD50D, 1);
       this.markerRect.drawRect(0, 0, 32, 32);
-      this.markerRect.x = 256;
-      this.markerRect.y = 256;
+      this.markerRect.x = 480;
+      this.markerRect.y = 288;
       this.markerRect.visible = false;
     },
     toggleMarker: function(){

@@ -8,18 +8,31 @@ var menuState = {
 
   create: function(){
 
-    var startGameLabel = game.add.text(game.world.width - (game.world.width / 3) * 2,
-                                      game.world.height - game.world.height / 2,
+    var startGameLabel = game.add.text(0, 0,
                                       'Start Game',
-                                      {font: '50px Arial', fill: '#ffffff'});
+                                      {font: 'bold 50px Arial', fill: '#ffffff',
+                                      boundsAlignH: "center", boundsAlignV: "middle" });
+
+    startGameLabel.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
+    startGameLabel.setTextBounds(0, 0, game.world.width, game.world.height);
 
     startGameLabel.inputEnabled = true;
     startGameLabel.events.onInputDown.add(this.startGameListener, this);
+    startGameLabel.events.onInputOver.add(this.starGameOverListener, this);
+    startGameLabel.events.onInputOut.add(this.starGameOutListener, this);
 
   },
 
   update: function(){
 
+  },
+
+  starGameOverListener: function(item){
+    item.fill = "#ffff44";
+  },
+
+  starGameOutListener: function(item){
+    item.fill = "#ffffff";
   },
 
   startGameListener: function(){
