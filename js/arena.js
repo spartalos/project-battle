@@ -29,7 +29,7 @@ var arenaState = {
         }
       }
 
-     character.sprite = game.add.sprite(spawnAreaObject.x,
+     character.sprite = game.add.sprite(spawnAreaObject.x + 16,
                                                  spawnAreaObject.y,
                                                  'spritesheetImage',
                                                  character.tileId,
@@ -146,6 +146,10 @@ var arenaState = {
     if(this.defender.character.isPlacedOnObjective){
       this.attacker.character.onObjective(true);
       this.defender.character.onObjective(false);
+      tableState.pushInfo(this.attacker.character.player.team + ' won an objective. ' +
+      (tableState.table.objectives.length - this.attacker.character.player.capturedObjectives) + ' more to win.');
+      tableState.pushInfo(this.defender.character.player.team + ' lost an objective. ' +
+      (tableState.table.objectives.length - this.defender.character.player.capturedObjectives) + ' more to win.');
     }else if(this.attacker.character.isPlacedOnObjective){
       this.attacker.character.onObjective(false);
     }

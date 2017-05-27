@@ -7,7 +7,7 @@ var tableState = {
   nameLabel: null,
   healthLabel: null,
   speedLabel: null,
-  infoLabel: null,
+  infoQueue: [],
 
   table: {
 
@@ -88,6 +88,19 @@ var tableState = {
     },
 
   update: function() {
+    this.controlMovement();
+    this.showInfo();
+  },
+
+  showInfo: function(){
+    this.createInfoLabel(this.infoQueue.length, this.infoQueue.shift());
+  },
+
+  pushInfo: function(info){
+    this.infoQueue.push(info);
+  },
+
+  controlMovement: function(){
     if (this.activePlayer.controls.leftKey.isDown && this.activePlayer.controls
       .leftKey.downDuration(50)) {
       this.activePlayer.controls.leftKey.reset();
@@ -225,8 +238,8 @@ var tableState = {
       if (startTile.x * 32 == this.table.objectives[i].x
         && startTile.y * 32 == this.table.objectives[i].y) {
           this.activeCharacter.onObjective(false);
-          this.createInfoLabel(this.activePlayer.team + ' ' + ' loose an objective.\n'
-        + (this.table.objectives.length - this.activePlayer.capturedObjectives) + ' objective remaining.');
+          this.pushInfo(this.activePlayer.team + ' ' + ' loose an objective. '
+        + (this.table.objectives.length - this.activePlayer.capturedObjectives) + ' more to win.');
         break;
       }
     }
@@ -235,8 +248,8 @@ var tableState = {
       if (destinationTile.x * 32 == this.table.objectives[i].x
         && destinationTile.y * 32 == this.table.objectives[i].y) {
           this.activeCharacter.onObjective(true);
-          this.createInfoLabel(this.activePlayer.team + ' won an objective.\n' +
-          (this.table.objectives.length - this.activePlayer.capturedObjectives) + ' objective remaining.');
+          this.pushInfo(this.activePlayer.team + ' won an objective. ' +
+          (this.table.objectives.length - this.activePlayer.capturedObjectives) + ' more to win.');
           if(this.activePlayer.capturedObjectives == this.table.objectives.length){
             game.state.start('menu');
           }
@@ -269,14 +282,15 @@ var tableState = {
 
   },
 
-  createInfoLabel: function(info){
-    if(this.infoLabel){
-      this.infoLabel.destroy();
-    }
-    this.infoLabel = game.add.text((game.world.width / 3) * 2,
-                                      game.world.height - ((game.world.height / 1.2) - 72),
+  createInfoLabel: function(line, info){
+
+    console.log(line);
+
+    var infoLabel = game.add.text((game.world.width / 3) * 2,
+                                      game.world.height - ((game.world.height / 1.2) - (72 + (24 * line))),
                                       info,
                                       {font: '24px Arial', fill: '#ffffff'});
+    infoLabel.lifespan = 3000;
   },
 
   destroyLabels: function(){
