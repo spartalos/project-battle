@@ -146,10 +146,10 @@ var arenaState = {
     if(this.defender.character.isPlacedOnObjective){
       this.attacker.character.onObjective(true);
       this.defender.character.onObjective(false);
-      tableState.pushInfo(this.attacker.character.player.team + ' won an objective. ' +
-      (tableState.table.objectives.length - this.attacker.character.player.capturedObjectives) + ' more to win.');
-      tableState.pushInfo(this.defender.character.player.team + ' lost an objective. ' +
-      (tableState.table.objectives.length - this.defender.character.player.capturedObjectives) + ' more to win.');
+      tableState.pushInfo(this.attacker.character.player.captureObjectiveMessage,
+                          this.attacker.character.player.infoLabelPositionX);
+      tableState.pushInfo(this.defender.character.player.looseObjectiveMessage,
+                          this.defender.character.player.infoLabelPositionX);
     }else if(this.attacker.character.isPlacedOnObjective){
       this.attacker.character.onObjective(false);
     }

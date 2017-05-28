@@ -4,6 +4,10 @@ var Player = function(){
   this.color = '0x2A4F6E';
   this.spawnPoint = null;
   this.capturedObjectives = 0;
+  this.infoLabelPositionX = 0;
+
+  this.captureObjectiveMessage = null;
+  this.looseObjectiveMessage = null;
 
   this.marker = {
     markerRect: null,
@@ -11,7 +15,7 @@ var Player = function(){
       this.markerRect = game.add.graphics();
       this.markerRect.lineStyle(2, 0xFFD50D, 1);
       this.markerRect.drawRect(0, 0, 32, 32);
-      this.markerRect.x = 480;
+      this.markerRect.x = 576;
       this.markerRect.y = 288;
       this.markerRect.visible = false;
     },
@@ -81,6 +85,11 @@ var Player = function(){
     return this;
   }
 
+  this.withInfoPositionX = function(x){
+    this.infoLabelPositionX = x;
+    return this;
+  }
+
   this.addCharacter = function(id){
     this.characterDeck.push(new Character().initFromJSON(id).addToTeam(this.team).addToPlayer(this));
     return this;
@@ -88,15 +97,15 @@ var Player = function(){
 
   this.captureObjective = function(){
     this.capturedObjectives++;
-    console.log(this.team + ' captured ' + this.capturedObjectives + ' objectives.');
   };
 
   this.looseObjective = function(){
     this.capturedObjectives--;
-    console.log(this.team + ' captured ' + this.capturedObjectives + ' objectives.');
   };
 
   this.build = function(){
+    this.captureObjectiveMessage = this.team + ' won an objective.';
+    this.looseObjectiveMessage = this.team + ' loose an objective.';
     return this;
   };
 

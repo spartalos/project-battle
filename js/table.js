@@ -92,14 +92,6 @@ var tableState = {
     this.showInfo();
   },
 
-  showInfo: function(){
-    this.createInfoLabel(this.infoQueue.length, this.infoQueue.shift());
-  },
-
-  pushInfo: function(info){
-    this.infoQueue.push(info);
-  },
-
   controlMovement: function(){
     if (this.activePlayer.controls.leftKey.isDown && this.activePlayer.controls
       .leftKey.downDuration(50)) {
@@ -238,8 +230,7 @@ var tableState = {
       if (startTile.x * 32 == this.table.objectives[i].x
         && startTile.y * 32 == this.table.objectives[i].y) {
           this.activeCharacter.onObjective(false);
-          this.pushInfo(this.activePlayer.team + ' ' + ' loose an objective. '
-        + (this.table.objectives.length - this.activePlayer.capturedObjectives) + ' more to win.');
+          this.pushInfo(this.activePlayer.looseObjectiveMessage, this.activePlayer.infoLabelPositionX);
         break;
       }
     }
@@ -248,10 +239,10 @@ var tableState = {
       if (destinationTile.x * 32 == this.table.objectives[i].x
         && destinationTile.y * 32 == this.table.objectives[i].y) {
           this.activeCharacter.onObjective(true);
-          this.pushInfo(this.activePlayer.team + ' won an objective. ' +
-          (this.table.objectives.length - this.activePlayer.capturedObjectives) + ' more to win.');
+          this.pushInfo(this.activePlayer.captureObjectiveMessage, this.activePlayer.infoLabelPositionX);
           if(this.activePlayer.capturedObjectives == this.table.objectives.length){
-            game.state.start('menu');
+            winState.winner = this.activePlayer.team;
+            game.state.start('win');
           }
         break;
       }
@@ -266,15 +257,15 @@ var tableState = {
 
       if(characterOnTile){
 
-        this.healthLabel = game.add.text((game.world.width / 3) * 2,
+        this.healthLabel = game.add.text(characterOnTile.player.infoLabelPositionX,
                                           game.world.height - game.world.height / 1.2,
                                           'Health: ' + characterOnTile.health,
                                           {font: '24px Arial', fill: '#ffffff'});
-        this.nameLabel = game.add.text((game.world.width / 3) * 2,
+        this.nameLabel = game.add.text(characterOnTile.player.infoLabelPositionX,
                                           game.world.height - ((game.world.height / 1.2) + 24),
                                           'Name: ' + characterOnTile.name,
                                           {font: '24px Arial', fill: '#ffffff'});
-        this.speedLabel = game.add.text((game.world.width / 3) * 2,
+        this.speedLabel = game.add.text(characterOnTile.player.infoLabelPositionX,
                                           game.world.height - ((game.world.height / 1.2) - 24),
                                           'Speed: ' + characterOnTile.moveSpeed,
                                           {font: '24px Arial', fill: '#ffffff'});
@@ -282,15 +273,23 @@ var tableState = {
 
   },
 
-  createInfoLabel: function(line, info){
+  createInfoLabel: function(info){
 
-    console.log(line);
-
-    var infoLabel = game.add.text((game.world.width / 3) * 2,
-                                      game.world.height - ((game.world.height / 1.2) - (72 + (24 * line))),
-                                      info,
+    var infoLabel = game.add.text(info.position,
+                                      game.world.height - ((game.world.height / 1.2) - 72),
+                                      info.message,
                                       {font: '24px Arial', fill: '#ffffff'});
     infoLabel.lifespan = 3000;
+  },
+
+  showInfo: function(){
+    if(this.infoQueue.length > 0){
+      this.createInfoLabel(this.infoQueue.shift());
+    }
+  },
+
+  pushInfo: function(info, position){
+    this.infoQueue.push({message: info, position: position});
   },
 
   destroyLabels: function(){

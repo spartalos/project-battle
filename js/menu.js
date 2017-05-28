@@ -8,6 +8,14 @@ var menuState = {
 
   create: function(){
 
+    var titleLabel = game.add.text(0, 0,
+                                      'The Summoning',
+                                      {font: 'bold 70px Arial', fill: '#ffffff',
+                                      boundsAlignH: "center", boundsAlignV: "middle" });
+
+    titleLabel.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
+    titleLabel.setTextBounds(0, -200, game.world.width, game.world.height);
+
     var startGameLabel = game.add.text(0, 0,
                                       'Start Game',
                                       {font: 'bold 50px Arial', fill: '#ffffff',
@@ -42,6 +50,7 @@ var menuState = {
                       .withControls('default')
                       .withColor('0xe0e4f1')
                       .withSpawnPoint('spawnA')
+                      .withInfoPositionX(50)
                       .addCharacter(3)
                       .addCharacter(1)
                       .addCharacter(4)
@@ -69,6 +78,7 @@ var menuState = {
                                                 Phaser.Keyboard.P)
                       .withColor('0xe07f7f')
                       .withSpawnPoint('spawnB')
+                      .withInfoPositionX(game.world.width - 400)
                       .addCharacter(1)
                       .addCharacter(3)
                       .addCharacter(0)

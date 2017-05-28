@@ -98,29 +98,31 @@ var Character = function() {
   };
 
   this.moveOnArena = function(){
-    this.sprite.body.velocity.x = 0;
-    if (this.player.controls.upKey.isDown && this.sprite.body.blocked.down) {
-        this.sprite.body.velocity.y -= 250;
-    }
-    if (this.player.controls.leftKey.isDown) {
-      //Mirroring sprite on left movement
-      if(this.sprite.scale.x > 0){
-          this.sprite.scale.x *= -1;
-      };
-      this.sprite.body.velocity.x -= 75 * this.moveSpeed;
-    } else if (this.player.controls.rightKey.isDown) {
-      //Rescale sprite to default when moving right
-      if(this.sprite.scale.x < 0){
-        this.sprite.scale.x *= -1;
+    if(this.health > 0){
+      this.sprite.body.velocity.x = 0;
+      if (this.player.controls.upKey.isDown && this.sprite.body.blocked.down) {
+          this.sprite.body.velocity.y -= 250;
       }
-      this.sprite.body.velocity.x += 75 * this.moveSpeed;
-    }
-    if(this.player.controls.actionKey.isDown) {
-      if(this.player.controls.pointer){
-        this.weapon.fireAtXY(this.player.controls.pointer.position.x, this.player.controls.pointer.position.y);
-      }else{
-       this.weapon.fireAtXY(this.sprite.scale.x < 0 ? this.sprite.body.x - 50 : this.sprite.body.x + 50,this.sprite.body.y + 16);
-     }
+      if (this.player.controls.leftKey.isDown) {
+        //Mirroring sprite on left movement
+        if(this.sprite.scale.x > 0){
+            this.sprite.scale.x *= -1;
+        };
+        this.sprite.body.velocity.x -= this.arenaMoveSpeed;
+      } else if (this.player.controls.rightKey.isDown) {
+        //Rescale sprite to default when moving right
+        if(this.sprite.scale.x < 0){
+          this.sprite.scale.x *= -1;
+        }
+        this.sprite.body.velocity.x += this.arenaMoveSpeed;
+      }
+      if(this.player.controls.actionKey.isDown) {
+        if(this.player.controls.pointer){
+          this.weapon.fireAtXY(this.player.controls.pointer.position.x, this.player.controls.pointer.position.y);
+        }else{
+         this.weapon.fireAtXY(this.sprite.scale.x < 0 ? this.sprite.body.x - 50 : this.sprite.body.x + 50,this.sprite.body.y + 16);
+       }
+      }
     }
   };
 
