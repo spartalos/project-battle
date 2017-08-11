@@ -1,4 +1,5 @@
-# Homemade game project written in Phaser.js and HTML5.
+# The Summoning
+Homemade game project written in Phaser.js and HTML5.
 
 # Run in Docker
 ```
