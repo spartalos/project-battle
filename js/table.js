@@ -155,16 +155,27 @@ var tableState = {
   },
 
   findCharacterInTile: function(){
+    for(i = 0; i < menuState.players.length; i++){
+      for (j = 0; j < menuState.players[i].characterDeck.length; j++) {
+        if (this.activePlayer.marker.markerRect.x == menuState.players[i].characterDeck[j].sprite.x
+          && this.activePlayer.marker.markerRect.y == menuState.players[i].characterDeck[j].sprite.y) {
+          return menuState.players[i].characterDeck[j];
+        }
+      }
+    }
+  },
+
+  findActiveCharacterInTile: function(){
     for (i = 0; i < this.activePlayer.characterDeck.length; i++) {
       if (this.activePlayer.marker.markerRect.x == this.activePlayer.characterDeck[i].sprite.x
-         && this.activePlayer.marker.markerRect.y == this.activePlayer.characterDeck[i].sprite.y) {
+        && this.activePlayer.marker.markerRect.y == this.activePlayer.characterDeck[i].sprite.y) {
         return this.activePlayer.characterDeck[i];
       }
     }
   },
 
   pickUpCharacter: function(){
-    this.activeCharacter = this.findCharacterInTile();
+    this.activeCharacter = this.findActiveCharacterInTile();
   },
 
   putDownCharacter: function(){
@@ -218,9 +229,10 @@ var tableState = {
 
       this.captureDestinationTile(startTile, destinationTile);
       return true;
+    }else{
+      this.pushInfo(this.activePlayer.cantGoThereMessage, this.activePlayer.infoLabelPositionX);      
+      return false;      
     }
-
-    return false;
 
   },
 

@@ -8,6 +8,7 @@ var Player = function(){
 
   this.captureObjectiveMessage = null;
   this.looseObjectiveMessage = null;
+  this.cantGoThereMessage = "This character can't go there.";
 
   this.marker = {
     markerRect: null,

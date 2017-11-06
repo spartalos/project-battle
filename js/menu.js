@@ -45,9 +45,7 @@ var menuState = {
 
   startGameListener: function(){
 
-    if(this.players.length > 0){
-      this.players = [];
-    }
+    this.reinitPlayers();
 
     this.players.push(new Player()
                       .withTeam('teamA')
@@ -102,6 +100,12 @@ var menuState = {
                       .build());
 
     game.state.start('table');
+  },
+
+  reinitPlayers: function(){
+    if(this.players.length > 0){
+      this.players = [];
+    }
   }
 
 };
