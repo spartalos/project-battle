@@ -242,6 +242,7 @@ var tableState = {
           this.pushInfo(this.activePlayer.captureObjectiveMessage, this.activePlayer.infoLabelPositionX);
           if(this.activePlayer.capturedObjectives == this.table.objectives.length){
             winState.winner = this.activePlayer.team;
+            this.table.characterGroup.destroy();            
             game.state.start('win');
           }
         break;

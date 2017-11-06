@@ -45,6 +45,10 @@ var menuState = {
 
   startGameListener: function(){
 
+    if(this.players.length > 0){
+      this.players = [];
+    }
+
     this.players.push(new Player()
                       .withTeam('teamA')
                       .withControls('default')
