@@ -1,0 +1,23 @@
+{
+  "name": "project-battle",
+  "version": "1.0.0",
+  "description": "Homemade game project written in Phaser.js and HTML5.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spartalos/project-battle.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spartalos/project-battle/issues"
+  },
+  "homepage": "https://github.com/spartalos/project-battle#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4"
+  }
+}
