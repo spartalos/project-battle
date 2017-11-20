@@ -33,6 +33,7 @@ var loadState = {
   create: function(){
     //this.rescale(1.1,1.1);
     this.fullscreen();
+    game.stage.disableVisibilityChange = true;    
     game.state.start('menu');
   },
 

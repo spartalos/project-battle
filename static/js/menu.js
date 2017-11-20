@@ -47,31 +47,20 @@ var menuState = {
 
     this.reinitPlayers();
 
-    this.players.push(new Player()
+    var characterIds = [3, 1, 4, 0, 5, 0, 2, 0, 6, 0, 7, 0, 8, 0, 9, 1];
+
+      var player = new Player()
+                      .withName('Spartalos')
                       .withTeam('teamA')
                       .withControls('default')
                       .withColor('0xe0e4f1')
-                      .withSpawnPoint('spawnA')
                       .withInfoPositionX(50)
-                      .addCharacter(3)
-                      .addCharacter(1)
-                      .addCharacter(4)
-                      .addCharacter(0)
-                      .addCharacter(5)
-                      .addCharacter(0)
-                      .addCharacter(2)
-                      .addCharacter(0)
-                      .addCharacter(6)
-                      .addCharacter(0)
-                      .addCharacter(7)
-                      .addCharacter(0)
-                      .addCharacter(8)
-                      .addCharacter(0)
-                      .addCharacter(9)
-                      .addCharacter(1)
-                      .build());
+                      .addCharacters(characterIds)
+                      .build();
 
-    this.players.push(new Player()
+      this.players.push(player);
+
+ /*   this.players.push(new Player()
                       .withTeam('teamB')
                       .withControls('default', Phaser.Keyboard.I,
                                                 Phaser.Keyboard.K,
@@ -97,9 +86,13 @@ var menuState = {
                       .addCharacter(8)
                       .addCharacter(1)
                       .addCharacter(9)
-                      .build());
+                      .build());*/
 
-    game.state.start('table');
+    socket = io('http://localhost:5000');
+    socket.emit('newplayer', {name: player.name, characters: characterIds});
+    if(this.players.length > 2){                  
+      game.state.start('table');
+    }
   },
 
   reinitPlayers: function(){

@@ -1,6 +1,7 @@
 var Player = function(){
 
   this.team = null;
+  this.name = 'Unknown';
   this.color = '0x2A4F6E';
   this.spawnPoint = null;
   this.capturedObjectives = 0;
@@ -9,6 +10,10 @@ var Player = function(){
   this.captureObjectiveMessage = null;
   this.looseObjectiveMessage = null;
   this.cantGoThereMessage = "This character can't go there.";
+
+  this.characterDeck = [];
+  
+  this.isActive = false;
 
   this.marker = {
     markerRect: null,
@@ -45,12 +50,13 @@ var Player = function(){
     }
   };
 
-  this.characterDeck = [];
-
-  this.isActive = false;
-
   this.withMarker = function(){
     this.marker.initMarker();
+    return this;
+  };
+
+  this.withName = function(name){
+    this.name = name;
     return this;
   };
 
@@ -93,6 +99,13 @@ var Player = function(){
 
   this.addCharacter = function(id){
     this.characterDeck.push(new Character().initFromJSON(id).addToTeam(this.team).addToPlayer(this));
+    return this;
+  };
+
+  this.addCharacters = function(ids){
+    for(var i = 0; i < ids.length; i++){
+      this.characterDeck.push(new Character().initFromJSON(ids[i]).addToTeam(this.team).addToPlayer(this));
+    }
     return this;
   };
 

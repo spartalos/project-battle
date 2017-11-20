@@ -18,6 +18,8 @@ var tableState = {
     characterGroup: null,
     objects: null,
     objectives: [],
+    spawnObjects: [{name: 'spawnA', taken: false},
+                  {name: 'spawnB', taken: false}],
 
     initTable: function() {
       this.tilemap = game.add.tilemap('tableTileMap');
@@ -39,14 +41,18 @@ var tableState = {
       }
     },
 
-    spawnCharacters: function(spawnId, characterDeck, color) {
+    spawnCharacters: function(characterDeck, color) {
 
       var spawnAreaObject = null;
 
       for (i = 0; i < this.objects.length; i++) {
-        if (this.objects[i].type == spawnId) {
-          spawnAreaObject = this.objects[i];
-          break;
+        for(j = 0; (spawnAreaObject == null && j < this.spawnObjects.length); j++){
+          if(!this.spawnObjects[j].taken){
+            if (this.objects[i].type == this.spawnObjects[j].name) {
+              spawnAreaObject = this.objects[i];
+              this.spawnObjects[j].taken = true;
+            }
+          }
         }
       }
 
@@ -120,8 +126,7 @@ var tableState = {
 
   initPlayersCharacters: function(){
     for (k = 0; k < menuState.players.length; k++) {
-      this.table.spawnCharacters(menuState.players[k].spawnPoint, menuState
-        .players[k].characterDeck);
+      this.table.spawnCharacters(menuState.players[k].characterDeck);
       menuState.players[k].marker.drawMarker();
     }
   },
