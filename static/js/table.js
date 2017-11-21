@@ -18,8 +18,6 @@ var tableState = {
     characterGroup: null,
     objects: null,
     objectives: [],
-    spawnObjects: [{name: 'spawnA', taken: false},
-                  {name: 'spawnB', taken: false}],
 
     initTable: function() {
       this.tilemap = game.add.tilemap('tableTileMap');
@@ -45,14 +43,10 @@ var tableState = {
 
       var spawnAreaObject = null;
 
-      for (i = 0; i < this.objects.length; i++) {
-        for(j = 0; (spawnAreaObject == null && j < this.spawnObjects.length); j++){
-          if(!this.spawnObjects[j].taken){
-            if (this.objects[i].type == this.spawnObjects[j].name) {
-              spawnAreaObject = this.objects[i];
-              this.spawnObjects[j].taken = true;
-            }
-          }
+      for (i = 0; (spawnAreaObject == null && i < this.objects.length); i++) {
+        if(this.objects[i].type.indexOf('spawn') !== -1){
+          spawnAreaObject = this.objects[i];
+          this.objects.splice(i, 1);
         }
       }
 

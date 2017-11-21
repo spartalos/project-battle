@@ -24,7 +24,15 @@ server.listen(5000, function() {
 });
 
 io.on('connection', function(socket) {
+
     socket.on('newplayer', function(player){
-        players.push({id: lastPlayerId++, name: player.name, characters: player.characters});
+        players.push({id: lastPlayerId++, name: player.name, team: player.team, controls: player.controls, 
+                      color: player.color, infoPosition: player.infoPosition, characters: player.characters});
+        console.log("New player joined: " + JSON.stringify(players[players.length - 1]));
+        if(players.length == 2){
+          console.log('Game is starting with players: ' + JSON.stringify(players));
+          socket.emit('start', players);
+        }
     });
+
 });
