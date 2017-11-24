@@ -1,0 +1,7 @@
+*.coffee
+*.html
+*.png
+bower.json
+example/
+index.html
+screenshots/

@@ -1,0 +1,21 @@
+env:
+  browser: yes
+extends: 'eslint:recommended'
+globals:
+  Phaser: no
+rules:
+  indent:
+    - 'off'
+  linebreak-style:
+    - error
+    - unix
+  no-shadow:
+    - warn
+  no-unused-vars:
+    - warn
+  quotes:
+    - error
+    - double
+  semi:
+    - error
+    - always

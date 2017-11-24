@@ -12,6 +12,8 @@ var lastPlayerId = 0;
 
 app.set('port', 5000);
 app.use('/static', express.static(__dirname + '/static'));
+app.use('/static/phaser/phaser.min.js', express.static(__dirname + '/node_modules/phaser-ce/build/phaser.min.js'));
+app.use('/static/phaser/phaser-fps.js', express.static(__dirname + '/node_modules/phaser-plugin-advanced-timing/index.js'));
 
 // Routing
 app.get('/', function(request, response) {
