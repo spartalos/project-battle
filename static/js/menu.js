@@ -8,38 +8,16 @@ var menuState = {
 
   create: function(){
 
-    var titleLabel = game.add.text(0, 0,
-                                      'The Summoning',
-                                      {font: 'bold 70px Arial', fill: '#ffffff',
-                                      boundsAlignH: "center", boundsAlignV: "middle" });
+    var titleLabel = new Label(0, -200, 'Project Battle', '50px', 'bold', true).build();
+    var subTitleLabel = new Label(0, -150, 'Alpha build', '20px', 'bold', true).build();
 
-    titleLabel.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
-    titleLabel.setTextBounds(0, -200, game.world.width, game.world.height);
+    var startGameLabel = new Label(0, 0, 'Start Local Game', '50px', 'bold', false)
+                        .OnInputDown(this.startGameListener)
+                        .withContext(this).build();
 
-    var startGameLabel = game.add.text(0, 0,
-                                      'Start Local Game',
-                                      {font: 'bold 50px Arial', fill: '#ffffff',
-                                      boundsAlignH: "center", boundsAlignV: "middle" });
-
-    startGameLabel.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
-    startGameLabel.setTextBounds(0, 0, game.world.width, game.world.height);
-
-    var startOnlineGameLabel = game.add.text(0, 0,
-      'Connect to Online Game',
-      {font: 'bold 50px Arial', fill: '#ffffff',
-      boundsAlignH: "center", boundsAlignV: "middle" });
-
-    startOnlineGameLabel.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
-    startOnlineGameLabel.setTextBounds(0, 200, game.world.width, game.world.height);
-    startOnlineGameLabel.inputEnabled = true;
-    startOnlineGameLabel.events.onInputDown.add(this.startOnlineGameListener, this);
-    startOnlineGameLabel.events.onInputOver.add(this.starGameOverListener, this);
-    startOnlineGameLabel.events.onInputOut.add(this.starGameOutListener, this);
-
-    startGameLabel.inputEnabled = true;
-    startGameLabel.events.onInputDown.add(this.startGameListener, this);
-    startGameLabel.events.onInputOver.add(this.starGameOverListener, this);
-    startGameLabel.events.onInputOut.add(this.starGameOutListener, this);
+    var startOnlineGameLabel = new Label(0, 100, 'Connect to Online Game', '50px', 'bold', false)
+                              .OnInputDown(this.startOnlineGameListener)
+                              .withContext(this).build();
 
   },
 
@@ -75,14 +53,6 @@ var menuState = {
 
       game.state.start('table');
     });
-  },
-
-  starGameOverListener: function(item){
-    item.fill = "#ffff44";
-  },
-
-  starGameOutListener: function(item){
-    item.fill = "#ffffff";
   },
 
   startGameListener: function(){
