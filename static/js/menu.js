@@ -35,7 +35,7 @@ var menuState = {
     socket.emit('newplayer', {name: name, team: team, controls: controls, color: color, infoPosition: 25, characters: characterIds});
 
     this.startOnlineGameLabel.setText('Waiting for other players to join...');
-    this.startOnlineGameLabel.disableHoverEffects();
+    this.startOnlineGameLabel.disableAllEvents();
         
     this.waitForStartSignalFromServer();
 

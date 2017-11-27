@@ -53,7 +53,18 @@ var Label = function(x, y, text, fontSize, fontStyle, static){
         this.phaserObject.events.onInputOver.removeAll();
         this.phaserObject.events.onInputOut.removeAll();
         return this;
-    }
+    };
+
+    this.disableInputDown = function(){
+        this.inputDown = null;
+        this.phaserObject.events.onInputDown.removeAll();
+        return this;
+    };
+
+    this.disableAllEvents = function(){
+        this.disableHoverEffects();
+        this.disableInputDown();
+    };
 
     this.build = function(){
         this.phaserObject = game.add.text(0, 0,

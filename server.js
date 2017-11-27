@@ -8,6 +8,8 @@ var server = http.Server(app);
 var io = socketIO(server);
 
 var players = [];
+var teams = [{name: 'teamA', color: '0xe0e4f1'},
+            {name: 'teamB', color: '0xe07f7f'}]
 var lastPlayerId = 0;
 
 app.set('port', 5000);
@@ -28,8 +30,9 @@ server.listen(5000, function() {
 io.on('connection', function(socket) {
 
     socket.on('newplayer', function(player){
-        players.push({id: lastPlayerId++, name: player.name, team: player.team, controls: player.controls, 
-                      color: player.color, infoPosition: player.infoPosition, characters: player.characters});
+        players.push({id: lastPlayerId++, name: player.name, team: teams[players.length].team, controls: player.controls, 
+                      color: teams[players.length].color, infoPosition: player.infoPosition, characters: player.characters});
+        socket.player = players[players.length - 1];
         console.log("New player joined: " + JSON.stringify(players[players.length - 1]));
         if(players.length == 2){
           console.log('Game is starting with players: ' + JSON.stringify(players));
