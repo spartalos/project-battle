@@ -40,6 +40,19 @@ var Label = function(x, y, text, fontSize, fontStyle, static){
     this.withContext = function(context){
         this.context = context;
         return this; 
+    };
+
+    this.setText = function(text){
+        this.text = text;
+        this.phaserObject.setText(text);
+    };
+
+    this.disableHoverEffects = function(){
+        this.inputOver = null;
+        this.inputOut = null;
+        this.phaserObject.events.onInputOver.removeAll();
+        this.phaserObject.events.onInputOut.removeAll();
+        return this;
     }
 
     this.build = function(){

@@ -1,6 +1,7 @@
 var menuState = {
 
   players: [],
+  startOnlineGameLabel: null,
 
   preload: function (){
 
@@ -15,7 +16,7 @@ var menuState = {
                         .OnInputDown(this.startGameListener)
                         .withContext(this).build();
 
-    var startOnlineGameLabel = new Label(0, 100, 'Connect to Online Game', '50px', 'bold', false)
+    this.startOnlineGameLabel = new Label(0, 100, 'Connect to Online Game', '50px', 'bold', false)
                               .OnInputDown(this.startOnlineGameListener)
                               .withContext(this).build();
 
@@ -32,6 +33,9 @@ var menuState = {
     var color = '0xe0e4f1';
     var infoPosition = 25;
     socket.emit('newplayer', {name: name, team: team, controls: controls, color: color, infoPosition: 25, characters: characterIds});
+
+    this.startOnlineGameLabel.setText('Waiting for other players to join...');
+    this.startOnlineGameLabel.disableHoverEffects();
         
     this.waitForStartSignalFromServer();
 
@@ -39,7 +43,7 @@ var menuState = {
 
   waitForStartSignalFromServer: function(){
     socket.on('start', function(players){
-
+      console.log('start signal arrived');
       players.forEach( function(player){
         menuState.players.push(new Player()
                             .withName(player.name)

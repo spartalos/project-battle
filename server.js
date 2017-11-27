@@ -33,8 +33,10 @@ io.on('connection', function(socket) {
         console.log("New player joined: " + JSON.stringify(players[players.length - 1]));
         if(players.length == 2){
           console.log('Game is starting with players: ' + JSON.stringify(players));
-          socket.emit('start', players);
+          io.sockets.emit('start', players);
         }
     });
+
+
 
 });
